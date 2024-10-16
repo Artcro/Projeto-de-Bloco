@@ -1,0 +1,7 @@
+{
+	"files.autoSave": "onFocusChange",
+	"prettier.useTabs": true,
+	"editor.formatOnSave": true,
+	"scm.compactFolders": false,
+	"explorer.compactFolders": false
+}
