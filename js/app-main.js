@@ -1,6 +1,9 @@
 alasql("CREATE localStorage DATABASE IF NOT EXISTS db");
 alasql("ATTACH localStorage DATABASE db");
 alasql("USE db");
+alasql(
+  "CREATE TABLE IF NOT EXISTS products (id INT, category_id INT, name string, created_at DATE)"
+);
 
 class Usuario {
   constructor(nome, email) {
@@ -15,6 +18,7 @@ class Usuario {
     return Math.abs(ageDate.getUTCFullYear() - 1970);
   }
 }
+
 class Usuarios {
   constructor() {
     this.usuarios = [];
@@ -43,6 +47,7 @@ class Usuarios {
     return this.usuarios.find((user) => user.email == email) != undefined;
   }
 }
+
 class Produto {
   constructor(nome, tipo, detalhe) {
     this.nome = nome;
@@ -50,12 +55,6 @@ class Produto {
     this.detalhe = detalhe;
   }
 }
-
-alasql(
-  "CREATE TABLE IF NOT EXISTS products (id INT, category_id INT, name string, created_at DATE)"
-);
-
-console.log(alasql("SELECT * FROM products"));
 
 let usuariosCadastrados = new Usuarios();
 
