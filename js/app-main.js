@@ -1,9 +1,9 @@
-alasql("CREATE localStorage DATABASE IF NOT EXISTS db");
-alasql("ATTACH localStorage DATABASE db");
-alasql("USE db");
-alasql(
-	"CREATE TABLE IF NOT EXISTS products (id INT, category_id INT, name string, created_at DATE)"
-);
+document.addEventListener("DOMContentLoaded", () => {
+	if (localStorage.getItem("projeto") == null) {
+	}
+	createAndLoadDatabase();
+	console.log(localStorage.getItem("projeto"));
+});
 
 class Usuario {
 	constructor(nome, email) {
@@ -81,8 +81,25 @@ function cadastrarSolicitante() {
 
 	const li = document.createElement("li");
 	li.textContent = usuariosCadastrados.isCadastrado(nome)
-		? "Usuario Cadastrado! Nome: " + usuariosCadastrados.getUsuario(nome).nome
+		? "Usuario Cadastrado! Nome: " +
+		  usuariosCadastrados.getUsuario(nome).nome
 		: "Erro no cadastro.";
 
 	listaSolicitantes.appendChild(li);
 }
+
+function createAndLoadDatabase() {
+	alasql.options.dateAsString = true;
+	alasql("CREATE localStorage DATABASE IF NOT EXISTS projeto");
+	alasql("ATTACH localStorage DATABASE projeto");
+	alasql("USE projeto");
+	alasql(
+		"CREATE TABLE IF NOT EXISTS products (id INT, category_id INT, name string, created_at DATE)"
+	);
+}
+let data = Date.now().toString();
+alasql(`INSERT INTO products VALUES (1, 1, 'car1', ${data})`);
+console.log(alasql("SELECT * FROM products"));
+
+function insertToDatabase() {}
+function removeFromDatabase() {}
