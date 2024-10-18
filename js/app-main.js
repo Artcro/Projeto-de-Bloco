@@ -1,8 +1,6 @@
 document.addEventListener("DOMContentLoaded", () => {
-	if (localStorage.getItem("projeto") == null) {
+	if (localStorage.getItem("projetobloco") == null) {
 	}
-	createAndLoadDatabase();
-	console.log(localStorage.getItem("projeto"));
 });
 
 class Usuario {
@@ -88,18 +86,33 @@ function cadastrarSolicitante() {
 	listaSolicitantes.appendChild(li);
 }
 
-function createAndLoadDatabase() {
-	alasql.options.dateAsString = true;
-	alasql("CREATE localStorage DATABASE IF NOT EXISTS projeto");
-	alasql("ATTACH localStorage DATABASE projeto");
-	alasql("USE projeto");
-	alasql(
-		"CREATE TABLE IF NOT EXISTS products (id INT, category_id INT, name string, created_at DATE)"
-	);
-}
+// localStorage.clear();
+
+alasql("CREATE localStorage DATABASE IF NOT EXISTS projeto_db");
+alasql("ATTACH localStorage DATABASE projeto_db");
+alasql("USE projeto_db");
+// alasql("DROP TABLE IF EXISTS disciplinas");
+alasql(
+	"CREATE TABLE IF NOT EXISTS disciplinas (id int AUTO_INCREMENT, category_id int, name string, created_at DATE)"
+);
+
 let data = Date.now().toString();
-alasql(`INSERT INTO products VALUES (1, 1, 'car1', ${data})`);
-console.log(alasql("SELECT * FROM products"));
+alasql(
+	`INSERT INTO disciplinas (id, category_id, name, created_at) VALUES (1, 1, 'car1', '${data}')`
+);
+
+// alasql('CREATE localStorage DATABASE IF NOT EXISTS Atlas');
+// alasql('ATTACH localStorage DATABASE Atlas AS MyAtlas');
+// alasql('CREATE TABLE IF NOT EXISTS MyAtlas.City (city string, population number)');
+// alasql('SELECT * INTO MyAtlas.City FROM ?',[ [
+//         {city:'Vienna', population:1731000},
+//         {city:'Budapest', population:1728000}
+// ] ]);
+// var res = alasql('SELECT * FROM MyAtlas.City');
+
+console.log(alasql("SELECT id FROM disciplinas"));
+
+console.log(localStorage.getItem("projeto_db.disciplinas"));
 
 function insertToDatabase() {}
 function removeFromDatabase() {}
