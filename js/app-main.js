@@ -13,15 +13,10 @@ class Usuario {
 
 class Usuarios {
 	constructor() {
-		this.usuarios = [];
-		this.load();
+		this.usuarios = this.load();
 	}
 	load() {
-		let users = alasql(`SELECT * FROM users`);
-		users.forEach((user) => {
-			let usuario = new Usuario(user[0], user[1], user[2]);
-		});
-		console.log(this.usuarios);
+		return alasql(`SELECT * FROM users`);
 	}
 	novoUsuario(nome, senha, email) {
 		let usuario = new Usuario(nome, senha, email);
@@ -40,7 +35,7 @@ class Usuarios {
 		this.usuarios = this.usuarios.filter((user) => user != nome);
 	}
 	todosUsuarios() {
-		return this.usuarios.values();
+		return this.usuarios;
 	}
 	numeroDeUsuarios() {
 		return this.usuarios.length;
@@ -87,9 +82,22 @@ alasql(
 alasql(
 	`INSERT INTO users (name, password, email) VALUES ('Arthur', 'Croce', '@')`
 );
+alasql(
+	`INSERT INTO users (name, password, email) VALUES ('Maria', 'Santos', '@')`
+);
+alasql(
+	`INSERT INTO users (name, password, email) VALUES ('Pedro', 'Silva', '@')`
+);
+alasql(
+	`INSERT INTO users (name, password, email) VALUES ('João', 'Almeida', '@')`
+);
+alasql(
+	`INSERT INTO users (name, password, email) VALUES ('Luiza', 'Ribeiro', '@')`
+);
 // console.log(localStorage.getItem("projeto_db.disciplinas"));
 
 let usuariosCadastrados = new Usuarios();
+console.log(usuariosCadastrados.todosUsuarios());
 
 function registerUser() {
 	let nome = document.getElementById("input-username").value;
@@ -130,6 +138,10 @@ function login() {
 
 	sessionStorage.setItem("loginSession", nome);
 	returnDiv.textContent = "Login realizado com Sucesso.";
+}
+
+function loggedActionEnabled() {
+	return sessionStorage.getItem("loginSession") != null;
 }
 
 function insertToDatabase() {}
