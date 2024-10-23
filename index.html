@@ -9,6 +9,7 @@
     <link rel="stylesheet" href="css/style.css" type="text/css" />
     <script src="https://cdn.jsdelivr.net/alasql/latest/alasql.min.js"></script>
     <script src="https://kit.fontawesome.com/8b08c3d24f.js" crossorigin="anonymous"></script>
+    <script src="js/bcrypt.min.js"></script>
     <script src="js/app-main.js"></script>
 </head>
 
@@ -37,12 +38,14 @@
                 <h4>Login</h4>
                 <div class="login-container">
                     <label for="input-username"><b>Username</b></label>
-                    <input type="text" placeholder="Enter Username" name="input-username" required />
+                    <input type="text" placeholder="Enter Username" name="input-username" id="input-username"
+                        required />
 
                     <label for="input-password"><b>Password</b></label>
-                    <input type="password" placeholder="Enter Password" name="input-password" required />
+                    <input type="password" placeholder="Enter Password" name="input-password" id="input-password"
+                        required />
 
-                    <button type="submit">Login</button>
+                    <button type="submit" onclick="registerUser()">Login</button>
                     <label>
                         <input type="checkbox" checked="checked" name="remember" />
                         Remember me
