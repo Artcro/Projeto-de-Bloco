@@ -1,17 +1,35 @@
-document.addEventListener("DOMContentLoaded", () => {
-	if (localStorage.getItem("projetobloco") == null) {
-	}
-});
+canLoadProtectedPage();
 
-class Usuario {
-	constructor(nome, senha, email) {
-		this.nome = nome;
-		this.senha = senha;
+document.addEventListener("DOMContentLoaded", () => {});
+
+// localStorage.clear();
+
+alasql("CREATE localStorage DATABASE IF NOT EXISTS projeto_db");
+alasql("ATTACH localStorage DATABASE projeto_db");
+alasql("USE projeto_db");
+alasql("DROP TABLE IF EXISTS users");
+
+alasql(
+	"CREATE TABLE IF NOT EXISTS users (name string, password VARCHAR(255), email string, is_admin BOOLEAN, is_teacher BOOLEAN)"
+);
+alasql(`INSERT INTO users VALUES ('Arthur', 'Croce', '@', true, true)`);
+alasql(`INSERT INTO users VALUES ('Maria', 'Santos', '@', false, true)`);
+alasql(`INSERT INTO users VALUES ('Pedro', 'Silva', '@', false, false)`);
+alasql(`INSERT INTO users VALUES ('João', 'Almeida', '@', false, false)`);
+alasql(`INSERT INTO users VALUES ('Luiza', 'Ribeiro', '@', false, false)`);
+// console.log(localStorage.getItem("projeto_db.disciplinas"));
+
+class User {
+	constructor(name, password, email, is_admin, is_teacher) {
+		this.name = name;
+		this.password = password;
 		this.email = email;
+		this.is_admin = is_admin;
+		this.is_teacher = is_teacher;
 	}
 }
 
-class Usuarios {
+class UserPool {
 	constructor() {
 		this.usuarios = this.load();
 	}
@@ -19,16 +37,15 @@ class Usuarios {
 		return alasql(`SELECT * FROM users`);
 	}
 	novoUsuario(nome, senha, email) {
-		let usuario = new Usuario(nome, senha, email);
+		let usuario = new User(nome, senha, email);
 		if (this.isCadastrado(usuario)) {
 			return undefined;
 		}
 
 		this.usuarios.push(usuario);
 		alasql(
-			`INSERT INTO users (name, password, email) VALUES ('${nome}', '${senha}', '${email}')`
+			`INSERT INTO users VALUES ('${nome}', '${senha}', '${email}', 'false', 'false')`
 		);
-		console.log(alasql("SELECT * FROM users"));
 		return this.isCadastrado(usuario) ? undefined : usuario;
 	}
 	removerUsuario(nome) {
@@ -41,20 +58,24 @@ class Usuarios {
 		return this.usuarios.length;
 	}
 	getUsuario(nome) {
-		return this.usuarios.find((user) => user.nome == nome);
+		return this.usuarios.find((user) => user.name == nome);
 	}
 	checkPassword(nome, senha) {
-		return this.getUsuario(nome).senha == senha;
+		console.log(this.usuarios);
+		console.log(this.getUsuario(nome));
+		console.log(this.getUsuario(nome).password);
+		console.log(senha);
+		return this.getUsuario(nome).password == senha;
 	}
 	isCadastrado(objUsuario) {
 		return this.usuarios.includes(objUsuario);
 		// return (
-		// 	this.usuarios.find((user) => user.nome == objUsuario.nome) !=
+		// 	this.usuarios.find((user) => user.name == objUsuario.name) !=
 		// 	undefined
 		// );
 	}
 	isCadastradoNome(nome) {
-		return this.usuarios.find((user) => user.nome == nome) != undefined;
+		return this.usuarios.find((user) => user.name == nome) != undefined;
 	}
 	isCadastradoEmail(email) {
 		return this.usuarios.find((user) => user.email == email) != undefined;
@@ -63,40 +84,13 @@ class Usuarios {
 
 class Produto {
 	constructor(nome, tipo, detalhe) {
-		this.nome = nome;
+		this.name = nome;
 		this.tipo = tipo;
 		this.detalhe = detalhe;
 	}
 }
 
-// localStorage.clear();
-
-alasql("CREATE localStorage DATABASE IF NOT EXISTS projeto_db");
-alasql("ATTACH localStorage DATABASE projeto_db");
-alasql("USE projeto_db");
-alasql("DROP TABLE IF EXISTS users");
-
-alasql(
-	"CREATE TABLE IF NOT EXISTS users (name string, password VARCHAR(255), email string)"
-);
-alasql(
-	`INSERT INTO users (name, password, email) VALUES ('Arthur', 'Croce', '@')`
-);
-alasql(
-	`INSERT INTO users (name, password, email) VALUES ('Maria', 'Santos', '@')`
-);
-alasql(
-	`INSERT INTO users (name, password, email) VALUES ('Pedro', 'Silva', '@')`
-);
-alasql(
-	`INSERT INTO users (name, password, email) VALUES ('João', 'Almeida', '@')`
-);
-alasql(
-	`INSERT INTO users (name, password, email) VALUES ('Luiza', 'Ribeiro', '@')`
-);
-// console.log(localStorage.getItem("projeto_db.disciplinas"));
-
-let usuariosCadastrados = new Usuarios();
+let usuariosCadastrados = new UserPool();
 console.log(usuariosCadastrados.todosUsuarios());
 
 function registerUser() {
@@ -119,11 +113,18 @@ function registerUser() {
 	usuariosCadastrados.novoUsuario(nome, senha, email);
 }
 
+function isLoggedIn() {
+	return sessionStorage.getItem("loginSession") != null;
+}
+
 function login() {
 	let nome = document.getElementById("input-username").value;
 	let senha = document.getElementById("input-password").value;
 
-	let returnDiv = document.getElementById("login-message");
+	let returnDiv = document.querySelector(".login-message");
+
+	console.log(nome);
+	console.log(senha);
 
 	if (!usuariosCadastrados.isCadastradoNome(nome)) {
 		returnDiv.textContent =
@@ -133,16 +134,36 @@ function login() {
 
 	if (!usuariosCadastrados.checkPassword(nome, senha)) {
 		returnDiv.textContent = "Senha incorreta favor tentar novamente.";
+		console.log(usuariosCadastrados.todosUsuarios());
 		return;
 	}
 
+	console.log(nome);
 	sessionStorage.setItem("loginSession", nome);
+	console.log(sessionStorage.getItem("loginSession"));
 	returnDiv.textContent = "Login realizado com Sucesso.";
+	window.location = "./loggedOverview.html";
 }
 
-function loggedActionEnabled() {
-	return sessionStorage.getItem("loginSession") != null;
+function logout() {
+	if (isLoggedIn()) {
+		sessionStorage.removeItem("loginSession");
+	} else {
+		alert("You are not logged into any account!");
+	}
+
+	window.location = "./index.html";
 }
 
-function insertToDatabase() {}
-function removeFromDatabase() {}
+function canLoadProtectedPage() {
+	if (!isLoggedIn() && location.href.split("/").slice(-1) != "index.html") {
+		alert("You need to be logged in to access this page!");
+		window.location = "./index.html";
+		return;
+	}
+
+	if (isLoggedIn() && location.href.split("/").slice(-1) == "index.html") {
+		window.location = "./loggedOverview.html";
+		return;
+	}
+}
