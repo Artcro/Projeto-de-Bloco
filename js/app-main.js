@@ -1,7 +1,9 @@
 canLoadProtectedPage();
+window.addEventListener("load", () => {
+	showLoggedNavBar();
+});
 
-document.addEventListener("DOMContentLoaded", () => {});
-
+// https://dexie.org/docs/Version/Version.stores()
 // localStorage.clear();
 
 alasql("CREATE localStorage DATABASE IF NOT EXISTS projeto_db");
@@ -26,6 +28,18 @@ class User {
 		this.email = email;
 		this.is_admin = is_admin;
 		this.is_teacher = is_teacher;
+	}
+}
+
+class Student extends User {
+	constructor(name, password, email) {
+		super(name, password, email, false, true);
+	}
+}
+
+class Teacher extends User {
+	constructor(name, password, email) {
+		super(name, password, email, false, true);
 	}
 }
 
@@ -61,10 +75,6 @@ class UserPool {
 		return this.usuarios.find((user) => user.name == nome);
 	}
 	checkPassword(nome, senha) {
-		console.log(this.usuarios);
-		console.log(this.getUsuario(nome));
-		console.log(this.getUsuario(nome).password);
-		console.log(senha);
 		return this.getUsuario(nome).password == senha;
 	}
 	isCadastrado(objUsuario) {
@@ -82,7 +92,23 @@ class UserPool {
 	}
 }
 
-class Produto {
+class Disciplinas {
+	constructor(nome, tipo, detalhe) {
+		this.name = nome;
+		this.tipo = tipo;
+		this.detalhe = detalhe;
+	}
+}
+
+class Curso {
+	constructor(nome, tipo, detalhe) {
+		this.name = nome;
+		this.tipo = tipo;
+		this.detalhe = detalhe;
+	}
+}
+
+class Turma {
 	constructor(nome, tipo, detalhe) {
 		this.name = nome;
 		this.tipo = tipo;
@@ -138,7 +164,6 @@ function login() {
 		return;
 	}
 
-	console.log(nome);
 	sessionStorage.setItem("loginSession", nome);
 	console.log(sessionStorage.getItem("loginSession"));
 	returnDiv.textContent = "Login realizado com Sucesso.";
@@ -165,5 +190,38 @@ function canLoadProtectedPage() {
 	if (isLoggedIn() && location.href.split("/").slice(-1) == "index.html") {
 		window.location = "./loggedOverview.html";
 		return;
+	}
+}
+
+function createNavLink(name, href, parentUl) {
+	let navBarLi = document.createElement("li");
+	let navBarA = document.createElement("a");
+
+	navBarA.setAttribute("href", href);
+	navBarA.setAttribute("title", name);
+	navBarA.innerHTML = name;
+
+	navBarLi.appendChild(navBarA);
+	parentUl.appendChild(navBarLi);
+}
+
+function showLoggedNavBar() {
+	let navBarLinks = [
+		["Home", "./index.html"],
+		["Disciplinas", "./disciplinas.html"],
+		["Cadastro", "./cadastro.html"],
+		["Alunos", "./alunos.html"],
+	];
+
+	if (!isLoggedIn()) {
+		let navBarUl = document.querySelector(".nav-ul");
+		navBarUl.replaceChildren();
+		createNavLink(navBarLinks[0][0], navBarLinks[0][1], navBarUl);
+	} else {
+		let navBarUl = document.querySelector(".nav-ul");
+		navBarUl.replaceChildren();
+		navBarLinks.forEach((link) => {
+			createNavLink(link[0], link[1], navBarUl);
+		});
 	}
 }
