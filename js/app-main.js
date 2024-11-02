@@ -5,6 +5,14 @@ window.addEventListener("load", () =>
 });
 
 // https://dexie.org/docs/Version/Version.stores()
+import { Dexie } from './dexie.mjs';
+const db = new Dexie("FriendDatabase");
+db.version(1).stores({
+	users: "++id, name"
+});
+
+let UserDB = db.users.defineClass(User)
+
 // localStorage.clear();
 
 alasql("CREATE localStorage DATABASE IF NOT EXISTS projeto_db");
@@ -25,6 +33,7 @@ alasql(`INSERT INTO users
         VALUES ('Luiza', 'Ribeiro', '@', false, false)`);
 
 // console.log(localStorage.getItem("projeto_db.disciplinas"));
+
 
 class User
 {
