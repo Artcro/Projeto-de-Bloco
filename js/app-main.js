@@ -5,13 +5,6 @@ window.addEventListener("load", () =>
 });
 
 // https://dexie.org/docs/Version/Version.stores()
-import { Dexie } from './dexie.mjs';
-const db = new Dexie("FriendDatabase");
-db.version(1).stores({
-	users: "++id, name"
-});
-
-let UserDB = db.users.defineClass(User)
 
 // localStorage.clear();
 
@@ -164,6 +157,13 @@ class Turma
 		this.detalhe = detalhe;
 	}
 }
+
+// const db = new Dexie('FriendDatabase');
+// db.version(1).stores({
+// 	users: '++id, age'
+// });
+//
+// let UserDB = db.users.defineClass(User)
 
 let usuariosCadastrados = new UserPool();
 console.log(usuariosCadastrados.todosUsuarios());
