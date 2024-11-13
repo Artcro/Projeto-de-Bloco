@@ -1,32 +1,11 @@
+// https://dexie.org/docs/Version/Version.stores()
+// localStorage.clear();
+
 canLoadProtectedPage();
 window.addEventListener("load", () =>
 {
 	showLoggedNavBar();
 });
-
-// https://dexie.org/docs/Version/Version.stores()
-
-// localStorage.clear();
-
-alasql("CREATE localStorage DATABASE IF NOT EXISTS projeto_db");
-alasql("ATTACH localStorage DATABASE projeto_db");
-alasql("USE projeto_db");
-alasql("DROP TABLE IF EXISTS users");
-
-alasql("CREATE TABLE IF NOT EXISTS users (name string, password VARCHAR(255), email string, is_admin BOOLEAN, is_teacher BOOLEAN)");
-alasql(`INSERT INTO users
-        VALUES ('Arthur', 'Croce', '@', true, true)`);
-alasql(`INSERT INTO users
-        VALUES ('Maria', 'Santos', '@', false, true)`);
-alasql(`INSERT INTO users
-        VALUES ('Pedro', 'Silva', '@', false, false)`);
-alasql(`INSERT INTO users
-        VALUES ('João', 'Almeida', '@', false, false)`);
-alasql(`INSERT INTO users
-        VALUES ('Luiza', 'Ribeiro', '@', false, false)`);
-
-// console.log(localStorage.getItem("projeto_db.disciplinas"));
-
 
 class User
 {
@@ -158,12 +137,15 @@ class Turma
 	}
 }
 
-// const db = new Dexie('FriendDatabase');
-// db.version(1).stores({
-// 	users: '++id, age'
-// });
-//
-// let UserDB = db.users.defineClass(User)
+
+let UserDB = Dexie.users.defineClass(User);
+
+const db = new Dexie('FriendDatabase');
+db.version(1).stores({
+	users: '++id,name'
+});
+
+db.users.mapToClass(User)
 
 let usuariosCadastrados = new UserPool();
 console.log(usuariosCadastrados.todosUsuarios());

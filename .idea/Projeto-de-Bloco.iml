@@ -7,5 +7,6 @@
     <orderEntry type="sourceFolder" forTests="false" />
     <orderEntry type="library" name="dexie" level="application" />
     <orderEntry type="library" name="dexie" level="application" />
+    <orderEntry type="library" name="8b08c3d24f" level="application" />
   </component>
 </module>
