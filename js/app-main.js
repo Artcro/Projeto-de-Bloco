@@ -1,4 +1,3 @@
-// https://dexie.org/docs/Version/Version.stores()
 // localStorage.clear();
 
 canLoadProtectedPage();
@@ -6,46 +5,60 @@ window.addEventListener("load", () =>
 {
 	showLoggedNavBar();
 });
+window.addEventListener("beforeunload", () =>
+{
+	saveToLocalStorage();
+})
 
 class User
 {
-	constructor(name, password, email, is_admin, is_teacher)
-	{
-		this.name = name;
-		this.password = password;
-		this.email = email;
-		this.is_admin = is_admin;
-		this.is_teacher = is_teacher;
-	}
-}
+	#name;
+	#password;
+	#email;
 
-class Student extends User
-{
 	constructor(name, password, email)
 	{
-		super(name, password, email, false, true);
+		this.#name = name;
+		this.#password = password;
+		this.#email = email;
 	}
-}
 
-class Teacher extends User
-{
-	constructor(name, password, email)
+	get name()
 	{
-		super(name, password, email, false, true);
+		return this.#name;
 	}
+
+	set name(value)
+	{
+		this.#name = value;
+	}
+	get password()
+	{
+		return this.#password;
+	}
+
+	set password(value)
+	{
+		this.#password = value;
+	}
+	get email()
+	{
+		return this.#email;
+	}
+
+	set email(value)
+	{
+		this.#email = value;
+	}
+
 }
 
 class UserPool
 {
+	#users;
 	constructor()
 	{
-		this.usuarios = this.load();
-	}
-
-	load()
-	{
-		return alasql(`SELECT *
-                       FROM users`);
+		this.#users = localStorage.getItem("users");
 	}
 
 	novoUsuario(nome, senha, email)
@@ -57,11 +70,8 @@ class UserPool
 		}
 
 		this.usuarios.push(usuario);
-		alasql(`INSERT INTO users
-                VALUES ('${nome}', '${senha}', '${email}', 'false', 'false')`);
 		return this.isCadastrado(usuario) ? undefined : usuario;
 	}
-
 	removerUsuario(nome)
 	{
 		this.usuarios = this.usuarios.filter((user) => user != nome);
@@ -90,10 +100,6 @@ class UserPool
 	isCadastrado(objUsuario)
 	{
 		return this.usuarios.includes(objUsuario);
-		// return (
-		// 	this.usuarios.find((user) => user.name == objUsuario.name) !=
-		// 	undefined
-		// );
 	}
 
 	isCadastradoNome(nome)
@@ -136,16 +142,6 @@ class Turma
 		this.detalhe = detalhe;
 	}
 }
-
-
-let UserDB = Dexie.users.defineClass(User);
-
-const db = new Dexie('FriendDatabase');
-db.version(1).stores({
-	users: '++id,name'
-});
-
-db.users.mapToClass(User)
 
 let usuariosCadastrados = new UserPool();
 console.log(usuariosCadastrados.todosUsuarios());
@@ -273,4 +269,14 @@ function showLoggedNavBar()
 			createNavLink(link[0], link[1], navBarUl);
 		});
 	}
+}
+
+function saveToLocalStorage(name,content)
+{
+	localStorage.setItem(name,JSON.stringify(content));
+}
+
+function loadFromLocalStorage(name)
+{
+	return JSON.parse(localStorage.getItem(name))
 }
