@@ -1,0 +1,48 @@
+<!DOCTYPE html>
+<html lang="pt-br">
+<!-- cadastramento de disciplinas, curso, turma, professor, alunos -->
+
+<head>
+    <meta charset="UTF-8" />
+    <meta name="viewport" content="width=device-width, initial-scale=1.0" />
+    <title>Gerenciador de Disciplinas Infnet</title>
+    <link rel="stylesheet" href="css/style.css" type="text/css" />
+    <script src="https://kit.fontawesome.com/8b08c3d24f.js" crossorigin="anonymous"></script>
+    <script src="js/app-main.js"></script>
+</head>
+
+<body>
+    <div class="full-page">
+        <div class="header">
+            <div class="nav">
+                <ul class="nav-ul">
+                </ul>
+            </div>
+        </div>
+        <div class="main">
+            <div class="main-frame">
+                <h4>Login</h4>
+                <div class="login-container">
+                    <label for="input-username"><b>Username</b></label>
+                    <input type="text" placeholder="Enter Username" name="input-username" id="input-username" required
+                        value="Arthur" />
+
+                    <label for="input-password"><b>Password</b></label>
+                    <input type="password" placeholder="Enter Password" name="input-password" id="input-password"
+                        required value="Croce" />
+
+                    <button type="submit" onclick="login()">Login</button>
+                    <label>
+                        <input type="checkbox" checked="checked" name="remember" />
+                        Remember me
+                    </label>
+                </div>
+                <div class="login-message"></div>
+                <!-- <span class="psw"><a href="#">Forgot password</a></span> -->
+            </div>
+        </div>
+        <div class="footer"></div>
+    </div>
+</body>
+
+</html>

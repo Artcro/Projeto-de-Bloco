@@ -1,3 +1,7 @@
+:root {
+	--bs-primary: #ff339c; /* Change to your desired color (e.g., orange) */
+}
+
 * {
 	margin: 0;
 	padding: 0;
@@ -78,44 +82,4 @@ h4 {
 	align-items: center;
 	flex-direction: column;
 	position: relative;
-}
-
-/* Full-width inputs */
-input[type="text"],
-input[type="password"] {
-	width: 200px;
-	padding: 12px 20px;
-	margin: 8px 0;
-	border: 1px solid #ccc;
-}
-
-.login-container {
-	padding: 16px;
-	display: flex;
-	flex-direction: column;
-	justify-content: center;
-	align-items: flex-start;
-}
-
-.login-container button {
-	background-color: #00a8e8;
-	color: white;
-	padding: 14px 20px;
-	margin: 8px 0;
-	border: none;
-	cursor: pointer;
-	width: 200px;
-}
-
-.login-container button:hover {
-	opacity: 0.8;
-}
-
-.footer {
-	color: white;
-	height: 5vh;
-	background-color: #00171f;
-	display: flex;
-	justify-content: center;
-	align-items: center;
 }

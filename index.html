@@ -1,48 +1,102 @@
 <!DOCTYPE html>
 <html lang="pt-br">
-<!-- cadastramento de disciplinas, curso, turma, professor, alunos -->
-
 <head>
-    <meta charset="UTF-8" />
-    <meta name="viewport" content="width=device-width, initial-scale=1.0" />
-    <title>Gerenciador de Disciplinas Infnet</title>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>Academic Management System - Home</title>
+    <link href="https://cdn.jsdelivr.net/npm/bootstrap@5.3.0/dist/css/bootstrap.min.css" rel="stylesheet">
     <link rel="stylesheet" href="css/style.css" type="text/css" />
     <script src="https://kit.fontawesome.com/8b08c3d24f.js" crossorigin="anonymous"></script>
     <script src="js/app-main.js"></script>
 </head>
-
 <body>
-    <div class="full-page">
-        <div class="header">
-            <div class="nav">
-                <ul class="nav-ul">
-                </ul>
-            </div>
+<!-- Navbar -->
+<nav class="navbar navbar-expand-lg navbar-light bg-light">
+    <div class="container-fluid">
+        <a class="navbar-brand" href="#">S.I.G.A</a>
+        <button class="navbar-toggler" type="button" data-bs-toggle="collapse" data-bs-target="#navbarNav" aria-controls="navbarNav" aria-expanded="false" aria-label="Toggle navigation">
+            <span class="navbar-toggler-icon"></span>
+        </button>
+        <div class="collapse navbar-collapse" id="navbarNav">
+            <ul class="navbar-nav">
+                <!-- Add the 'active' class to highlight the current page -->
+                <li class="nav-item">
+                    <a class="nav-link active bg-primary text-white rounded" aria-current="page" href="#">Início</a>
+                </li>
+                <li class="nav-item">
+                    <a class="nav-link" href="#">Avisos</a>
+                </li>
+                <li class="nav-item">
+                    <a class="nav-link" href="#">Cadastrar</a>
+                </li>
+                <li class="nav-item">
+                    <a class="nav-link" href="#">Notas</a>
+                </li>
+                <li class="nav-item">
+                    <a class="nav-link" href="#">Projetos</a>
+                </li>
+                <li class="nav-item">
+                    <a class="nav-link" href="#">Trabalhos</a>
+                </li>
+                <li class="nav-item">
+                    <a class="nav-link" href="#">Backups</a>
+                </li>
+                <li class="nav-item">
+                    <a class="nav-link" href="#">Fórum</a>
+                </li>
+            </ul>
         </div>
-        <div class="main">
-            <div class="main-frame">
-                <h4>Login</h4>
-                <div class="login-container">
-                    <label for="input-username"><b>Username</b></label>
-                    <input type="text" placeholder="Enter Username" name="input-username" id="input-username" required
-                        value="Arthur" />
-
-                    <label for="input-password"><b>Password</b></label>
-                    <input type="password" placeholder="Enter Password" name="input-password" id="input-password"
-                        required value="Croce" />
-
-                    <button type="submit" onclick="login()">Login</button>
-                    <label>
-                        <input type="checkbox" checked="checked" name="remember" />
-                        Remember me
-                    </label>
-                </div>
-                <div class="login-message"></div>
-                <!-- <span class="psw"><a href="#">Forgot password</a></span> -->
-            </div>
-        </div>
-        <div class="footer"></div>
     </div>
-</body>
+</nav>
 
+<!-- Main Content -->
+<div class="container mt-5">
+    <div class="row g-4 align-items-center">
+        <!-- Description Section -->
+        <div class="col-lg-6">
+            <div class="card">
+                <div class="card-header bg-primary text-white">Bem-vindo ao S.I.G.A</div>
+                <div class="card-body">
+                    <h5 class="card-title">Gerencie sua vida acadêmica com facilidade</h5>
+                    <p class="card-text">
+                        O Sistema de Gestão Acadêmica (S.I.G.A) foi desenvolvido para simplificar o gerenciamento das atividades acadêmicas.
+                        Aqui você pode acessar avisos, cadastrar informações, verificar notas, gerenciar projetos, e muito mais.
+                        Tudo isso em um único lugar para facilitar o seu dia a dia.
+                    </p>
+                </div>
+            </div>
+        </div>
+
+        <!-- Login Form Section -->
+        <div class="col-lg-6">
+            <div class="card">
+                <div class="card-header bg-primary text-white">Login</div>
+                <div class="card-body">
+                    <form>
+                        <div class="mb-3">
+                            <label for="username" class="form-label">Usuário</label>
+                            <input type="text" class="form-control" id="username" placeholder="Digite seu nome de usuário">
+                        </div>
+                        <div class="mb-3">
+                            <label for="password" class="form-label">Senha</label>
+                            <input type="password" class="form-control" id="password" placeholder="Digite sua senha">
+                        </div>
+                        <div class="d-grid">
+                            <button type="submit" class="btn btn-primary">Entrar</button>
+                        </div>
+                    </form>
+                </div>
+            </div>
+        </div>
+    </div>
+</div>
+
+<!-- Footer -->
+<footer class="bg-light text-center py-3 mt-5 fixed-bottom">
+    <p>&copy; 2024 S.I.G.A. Todos os direitos reservados.</p>
+</footer>
+
+<!-- Bootstrap JS -->
+<script src="https://cdn.jsdelivr.net/npm/bootstrap@5.3.0/dist/js/bootstrap.bundle.min.js"></script>
+</body>
 </html>
