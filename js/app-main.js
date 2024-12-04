@@ -1,9 +1,7 @@
-// localStorage.clear();
-
-canLoadProtectedPage();
+//canLoadProtectedPage();
 window.addEventListener("load", () =>
 {
-	showLoggedNavBar();
+	//showLoggedNavBar();
 });
 window.addEventListener("beforeunload", () =>
 {
@@ -58,7 +56,7 @@ class UserPool
 	#users;
 	constructor()
 	{
-		this.#users = localStorage.getItem("users");
+		this.#users = loadFromLocalStorage("users");
 	}
 
 	novoUsuario(nome, senha, email)
@@ -114,26 +112,6 @@ class UserPool
 }
 
 class Disciplinas
-{
-	constructor(nome, tipo, detalhe)
-	{
-		this.name = nome;
-		this.tipo = tipo;
-		this.detalhe = detalhe;
-	}
-}
-
-class Curso
-{
-	constructor(nome, tipo, detalhe)
-	{
-		this.name = nome;
-		this.tipo = tipo;
-		this.detalhe = detalhe;
-	}
-}
-
-class Turma
 {
 	constructor(nome, tipo, detalhe)
 	{
@@ -218,14 +196,14 @@ function logout()
 
 function canLoadProtectedPage()
 {
-	if (!isLoggedIn() && location.href.split("/").slice(-1) != "index.html")
+	if (!isLoggedIn() && location.href.split("/").slice(-1).join("") != "index.html")
 	{
 		alert("You need to be logged in to access this page!");
 		window.location = "./index.html";
 		return;
 	}
 
-	if (isLoggedIn() && location.href.split("/").slice(-1) == "index.html")
+	if (isLoggedIn() && location.href.split("/").slice(-1).join("") == "index.html")
 	{
 		window.location = "./loggedOverview.html";
 		return;

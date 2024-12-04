@@ -1,0 +1,138 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>Tabela com Paginação</title>
+    <!-- Bootstrap CSS -->
+    <link href="https://cdn.jsdelivr.net/npm/bootstrap@5.3.0/dist/css/bootstrap.min.css" rel="stylesheet">
+</head>
+<body>
+<div class="container my-4">
+    <h2 class="text-center">Tabela com Paginação</h2>
+
+    <!-- Items Per Page Selector -->
+    <div class="d-flex justify-content-between mb-3">
+        <div>
+            <label for="itemsPerPage" class="form-label">Itens por página:</label>
+            <select id="itemsPerPage" class="form-select w-auto">
+                <option value="10" selected>10</option>
+                <option value="20">20</option>
+                <option value="50">50</option>
+            </select>
+        </div>
+        <input type="text" id="searchBox" class="form-control w-25" placeholder="Pesquisar...">
+    </div>
+
+    <!-- Table -->
+    <table class="table table-striped table-bordered">
+        <thead>
+        <tr>
+            <th>#</th>
+            <th>Nome</th>
+            <th>Email</th>
+            <th>Idade</th>
+        </tr>
+        </thead>
+        <tbody id="tableBody">
+        <!-- Rows dynamically generated -->
+        </tbody>
+    </table>
+
+    <!-- Pagination -->
+    <nav>
+        <ul class="pagination justify-content-center" id="pagination">
+            <!-- Pagination items dynamically generated -->
+        </ul>
+    </nav>
+</div>
+
+<!-- Bootstrap JS -->
+<script src="https://cdn.jsdelivr.net/npm/bootstrap@5.3.0/dist/js/bootstrap.bundle.min.js"></script>
+
+<script>
+	// Sample data
+	const data = Array.from({length: 100}, (_, i) => ({
+		id: i + 1,
+		name: `Pessoa ${i + 1}`,
+		email: `pessoa${i + 1}@email.com`,
+		age: Math.floor(Math.random() * 50) + 18,
+	}));
+
+	const tableBody = document.getElementById("tableBody");
+	const pagination = document.getElementById("pagination");
+	const itemsPerPageSelector = document.getElementById("itemsPerPage");
+	const searchBox = document.getElementById("searchBox");
+
+	let currentPage = 1;
+	let itemsPerPage = parseInt(itemsPerPageSelector.value);
+	let filteredData = data;
+
+	function renderTable(page = 1)
+	{
+		const start = (page - 1) * itemsPerPage;
+		const end = start + itemsPerPage;
+		const rows = filteredData.slice(start, end)
+			.map(item => `
+          <tr>
+            <td>${item.id}</td>
+            <td>${item.name}</td>
+            <td>${item.email}</td>
+            <td>${item.age}</td>
+          </tr>
+        `).join("");
+		tableBody.innerHTML = rows;
+	}
+
+	function renderPagination()
+	{
+		const totalPages = Math.ceil(filteredData.length / itemsPerPage);
+		const buttons = Array.from({length: totalPages}, (_, i) => `
+        <li class="page-item ${i + 1 === currentPage ? "active" : ""}">
+          <button class="page-link" data-page="${i + 1}">${i + 1}</button>
+        </li>
+      `).join("");
+		pagination.innerHTML = buttons;
+	}
+
+	function updateTable()
+	{
+		renderTable(currentPage);
+		renderPagination();
+	}
+
+	// Handle items per page change
+	itemsPerPageSelector.addEventListener("change", () =>
+	{
+		itemsPerPage = parseInt(itemsPerPageSelector.value);
+		currentPage = 1; // Reset to the first page
+		updateTable();
+	});
+
+	// Handle pagination click
+	pagination.addEventListener("click", (event) =>
+	{
+		if (event.target.tagName === "BUTTON")
+		{
+			currentPage = parseInt(event.target.dataset.page);
+			updateTable();
+		}
+	});
+
+	// Handle search
+	searchBox.addEventListener("input", () =>
+	{
+		const query = searchBox.value.toLowerCase();
+		filteredData = data.filter(item =>
+			item.name.toLowerCase().includes(query) ||
+			item.email.toLowerCase().includes(query)
+		);
+		currentPage = 1; // Reset to the first page
+		updateTable();
+	});
+
+	// Initial render
+	updateTable();
+</script>
+</body>
+</html>
