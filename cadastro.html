@@ -1,44 +1,110 @@
 <!DOCTYPE html>
 <html lang="pt-br">
-<!-- cadastramento de disciplinas, curso, professor -->
-
 <head>
-    <meta charset="UTF-8" />
-    <meta name="viewport" content="width=device-width, initial-scale=1.0" />
-    <title>AppVendas: Sistema de Gestão de Pedidos</title>
-    <link rel="stylesheet" href="css/style.css" type="text/css" />
-    <script src="https://cdn.jsdelivr.net/npm/alasql@4"></script>
-    <script src="https://kit.fontawesome.com/8b08c3d24f.js" crossorigin="anonymous"></script>
-</head>
-
-<body>
-    <div class="full-page">
-        <div class="header">
-            <div class="nav">
-                <ul>
-                    <li><a href="#" title="Página Principal">Home</a></li>
-                    <li><a href="#" title="Produto">Produto</a></li>
-                    <li><a href="#" title="Pedido">Pedido</a></li>
-                    <li><a href="#" title="Solicitante">Solicitante</a></li>
-                </ul>
-            </div>
-        </div>
-        <div class="main">
-            <div class="login-frame">
-                <h4>Login</h4>
-
-                <label for="nome">Nome: </label>
-                <input type="text" id="nome" />
-
-                <label for="senha">Senha: </label>
-                <input type="password" id="senha" />
-
-                <button id="login-button">Login</button>
-            </div>
-        </div>
-        <div class="footer"></div>
-    </div>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>SIGA</title>
+    <link rel="shortcut icon" href="./img/img.png">
+    <link href="https://cdn.jsdelivr.net/npm/bootstrap@5.3.0/dist/css/bootstrap.min.css" rel="stylesheet">
+    <link href="https://cdn.jsdelivr.net/npm/bootstrap-icons/font/bootstrap-icons.css" rel="stylesheet">
     <script src="js/app-main.js"></script>
-</body>
+    <style>
+        .logo {
+            height: 50px;
+        }
 
+        .dropdown-toggle:not(:focus) {
+            outline: 0;
+        }
+
+        body {
+            background: url("./img/bg.jpg") no-repeat center center fixed;
+            background-size: cover;
+        }
+
+        main {
+            width: 100%;
+            height: 100vh;
+            background-color: rgba(0, 52, 89, 0.5);
+        }
+    </style>
+</head>
+<body>
+<main>
+    <!-- Header + Nav -->
+    <header class="bg-dark text-bg-dark p-3 mb-5">
+        <div class="container">
+            <div class="d-flex flex-wrap align-items-center justify-content-center">
+                <!-- Logo -->
+                <a href="" class="d-flex align-items-center mb-2 mb-lg-0 link-body-emphasis text-decoration-none">
+                    <img src="./img/logo.png" alt="Logo" class="logo me-3">
+                </a>
+
+                <!-- Nav -->
+                <ul class="nav col-12 col-lg-auto me-lg-auto mt-1 justify-content-center mb-md-0" id="main-menu-nav">
+                    <li>
+                        <h5>
+                            Sistema de Gerenciamento Acadêmico
+                        </h5>
+                    </li>
+                </ul>
+
+                <!-- User Profile -->
+                <div class="text-end d-flex justify-content-end align-items-center">
+                    <div class="col-12 col-lg-auto mb-0 me-3 d-flex flex-column justify-content-end align-items-end">
+                        <!-- Name -->
+                        <strong id="header-user-name">Faça Login</strong>
+                        <span class="text-white small d-flex align-items-center">
+				            <i class="bi bi-person me-1"></i>
+                            <!-- User Type -->
+                            <span id="header-user-type">Guest</span>
+			            </span>
+                    </div>
+                    <a class="d-block text-decoration-none dropdown-toggle link-white"
+                       aria-expanded="false">
+                        <img src="./img/perfil.webp" alt="mdo" width="32" height="32" class="rounded-circle">
+                    </a>
+                    <!-- Profile DropDown -->
+                    <ul class="dropdown-menu text-small">
+                    </ul>
+                </div>
+            </div>
+        </div>
+    </header>
+
+    <!-- Main Content -->
+    <div class="container mt-4">
+        <!-- Formulário Cadastro de Disciplinas -->
+        <div class="card mb-4">
+            <div class="card-header bg-primary text-white">Cadastrar Disciplinas</div>
+            <div class="card-body">
+                <div class="card-body">
+                    <form>
+                        <div class="mb-3">
+                            <label for="nome-disciplina" class="form-label">Nome da Disciplina: </label>
+                            <input type="text" class="form-control" id="nome-disciplina" placeholder="Nome da Disciplina">
+                        </div>
+                        <div class="mb-3">
+                            <label for="codigo-disciplina" class="form-label">Código da Disciplina: </label>
+                            <input type="text" class="form-control" id="codigo-disciplina" placeholder="Sobreescrever o código automático">
+                        </div>
+                        <div class="mb-3">
+                            <label for="codigo-disciplina" class="form-label"> </label>
+                            <input type="text" class="form-control" id="codigo-disciplina" placeholder="Sobreescrever o código automático">
+                        </div>
+
+                    </form>
+                </div>
+            </div>
+
+            <!-- Display de Disciplinas -->
+            <div class="card">
+                <div class="card-header bg-primary text-white">Disciplinas Cadastradas</div>
+                <div class="card-body">
+
+                </div>
+            </div>
+        </div>
+</main>
+</body>
 </html>
