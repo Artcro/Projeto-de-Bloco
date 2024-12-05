@@ -254,9 +254,7 @@ class MemoryStorage
 
 	static set disciplinas(value)
 	{
-		console.log(value);
 		this.#disciplinas.push(value);
-		console.log(this.#disciplinas);
 		saveToLocalStorage("disciplinas", this.#disciplinas);
 	}
 
@@ -270,77 +268,70 @@ class MemoryStorage
 
 class User
 {
-	#id;
-	#username;
-	#email;
-	#password;
-	#access;
-	#name;
+	id;
+	username;
+	email;
+	password;
+	access;
+	name;
 
 	constructor(username, password, access, name)
 	{
-		this.#username = username;
-		this.#password = password;
-		this.#access = access;
-		this.#name = name;
+		this.username = username;
+		this.password = password;
+		this.access = access;
+		this.name = name;
 	}
 
 	get id()
 	{
-		return this.#id;
+		return this.id;
 	}
 
 	set id(value)
 	{
-		this.#id = value;
+		this.id = value;
 	}
 
 	get username()
 	{
-		return this.#username;
+		return this.username;
 	}
 
 	set username(value)
 	{
-		this.#username = value;
+		this.username = value;
 	}
 
 	get password()
 	{
-		return this.#password;
+		return this.password;
 	}
 
 	set password(value)
 	{
-		this.#password = value;
+		this.password = value;
 	}
 
 	get email()
 	{
-		return this.#email;
+		return this.email;
 	}
 
 	set email(value)
 	{
-		this.#email = value;
+		this.email = value;
 	}
 
 	get access()
 	{
-		return this.#access;
+		return this.access;
 	}
 
 	set access(value)
 	{
-		this.#access = value;
+		this.access = value;
 	}
-
-	save()
-	{
-		loadFromLocalStorage("users");
-		saveToLocalStorage()
-	}
-
 }
 
 class Student extends User
@@ -434,69 +425,69 @@ class Teacher extends User
 
 class Disciplinas
 {
-	#id;
-	#name;
-	#workload;
-	#teacherId;
-	#courseId;
+	id;
+	name;
+	workload;
+	teacherId;
+	courseId;
 
 	constructor(name, codigo, workload, teacher, course)
 	{
-		this.#name = name;
-		this.#id = codigo;
-		this.#workload = workload;
-		this.#teacherId = teacher;
-		this.#courseId = course;
+		this.name = name;
+		this.id = codigo;
+		this.workload = workload;
+		this.teacherId = teacher;
+		this.courseId = course;
 	}
 
 	get id()
 	{
-		return this.#id;
+		return this.id;
 	}
 
 	set id(value)
 	{
-		this.#id = value;
+		this.id = value;
 	}
 
 	get name()
 	{
-		return this.#name;
+		return this.name;
 	}
 
 	set name(value)
 	{
-		this.#name = value;
+		this.name = value;
 	}
 
 	get workload()
 	{
-		return this.#workload;
+		return this.workload;
 	}
 
 	set workload(value)
 	{
-		this.#workload = value;
+		this.workload = value;
 	}
 
 	get teacherId()
 	{
-		return this.#teacherId;
+		return this.teacherId;
 	}
 
 	set teacherId(value)
 	{
-		this.#teacherId = value;
+		this.teacherId = value;
 	}
 
 	get courseId()
 	{
-		return this.#courseId;
+		return this.courseId;
 	}
 
 	set courseId(value)
 	{
-		this.#courseId = value;
+		this.courseId = value;
 	}
 
 }
