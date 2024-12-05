@@ -2,6 +2,159 @@
 window.addEventListener("load", () =>
 {
 	//showLoggedNavBar();
+	const disciplinas = [
+		{
+			nome: "Matemática Básica", codigo: "MAT101", cargahoraria: 60, professor: "João Silva", curso: "Engenharia"
+		}, {
+			nome: "Programação em JavaScript",
+			codigo: "CS102",
+			cargahoraria: 80,
+			professor: "Maria Oliveira",
+			curso: "Ciência da Computação"
+		}, {
+			nome: "Introdução à Física", codigo: "FIS201", cargahoraria: 40, professor: "Carlos Mendes", curso: "Física"
+		}, {
+			nome: "Química Geral", codigo: "QUI301", cargahoraria: 50, professor: "Ana Pereira", curso: "Química"
+		}, {
+			nome: "Algoritmos e Estruturas de Dados",
+			codigo: "CS202",
+			cargahoraria: 70,
+			professor: "Paulo Castro",
+			curso: "Engenharia de Software"
+		}, {
+			nome: "História da Arte",
+			codigo: "ART101",
+			cargahoraria: 45,
+			professor: "Juliana Martins",
+			curso: "Arquitetura"
+		}, {
+			nome: "Gestão de Projetos",
+			codigo: "ADM401",
+			cargahoraria: 60,
+			professor: "Rodrigo Almeida",
+			curso: "Administração"
+		}, {
+			nome: "Economia Básica", codigo: "ECO101", cargahoraria: 40, professor: "Fernanda Costa", curso: "Economia"
+		}, {
+			nome: "Sistemas Operacionais",
+			codigo: "CS301",
+			cargahoraria: 75,
+			professor: "Ricardo Lopes",
+			curso: "Engenharia de Computação"
+		}, {
+			nome: "Marketing Digital",
+			codigo: "MKT201",
+			cargahoraria: 50,
+			professor: "Mariana Ribeiro",
+			curso: "Publicidade e Propaganda"
+		}, {
+			nome: "Cálculo Diferencial e Integral I",
+			codigo: "MAT201",
+			cargahoraria: 90,
+			professor: "Luís Gonzaga",
+			curso: "Engenharia"
+		}, {
+			nome: "Estruturas de Dados Avançadas",
+			codigo: "CS302",
+			cargahoraria: 70,
+			professor: "Cláudia Torres",
+			curso: "Ciência da Computação"
+		}, {
+			nome: "Mecânica Clássica", codigo: "FIS301", cargahoraria: 50, professor: "Sérgio Nunes", curso: "Física"
+		}, {
+			nome: "Bioquímica", codigo: "BIO101", cargahoraria: 60, professor: "Patrícia Almeida", curso: "Biologia"
+		}, {
+			nome: "Geometria Analítica",
+			codigo: "MAT202",
+			cargahoraria: 45,
+			professor: "André Barros",
+			curso: "Matemática"
+		}, {
+			nome: "Banco de Dados Relacionais",
+			codigo: "CS402",
+			cargahoraria: 80,
+			professor: "Renato Silva",
+			curso: "Sistemas de Informação"
+		}, {
+			nome: "Eletromagnetismo",
+			codigo: "FIS401",
+			cargahoraria: 70,
+			professor: "Elis Regina",
+			curso: "Engenharia Elétrica"
+		}, {
+			nome: "Química Orgânica", codigo: "QUI201", cargahoraria: 50, professor: "Leonardo Lima", curso: "Química"
+		}, {
+			nome: "Redes de Computadores",
+			codigo: "CS502",
+			cargahoraria: 60,
+			professor: "Gabriela Souza",
+			curso: "Engenharia de Computação"
+		}, {
+			nome: "Introdução à Filosofia",
+			codigo: "FIL101",
+			cargahoraria: 40,
+			professor: "Antônio Carlos",
+			curso: "Filosofia"
+		}, {
+			nome: "Gestão Financeira",
+			codigo: "ADM201",
+			cargahoraria: 55,
+			professor: "Fernanda Melo",
+			curso: "Administração"
+		}, {
+			nome: "Teoria da Computação",
+			codigo: "CS601",
+			cargahoraria: 75,
+			professor: "Rafael Dantas",
+			curso: "Ciência da Computação"
+		}, {
+			nome: "Psicologia Organizacional",
+			codigo: "PSI301",
+			cargahoraria: 50,
+			professor: "Débora Costa",
+			curso: "Psicologia"
+		}, {
+			nome: "Lógica Matemática",
+			codigo: "MAT301",
+			cargahoraria: 60,
+			professor: "Marcelo Andrade",
+			curso: "Engenharia de Software"
+		}, {
+			nome: "Direito Empresarial",
+			codigo: "DIR101",
+			cargahoraria: 40,
+			professor: "Paula Ribeiro",
+			curso: "Direito"
+		}, {
+			nome: "Segurança da Informação",
+			codigo: "CS701",
+			cargahoraria: 65,
+			professor: "Marcos Tavares",
+			curso: "Sistemas de Informação"
+		}, {
+			nome: "Microbiologia", codigo: "BIO201", cargahoraria: 70, professor: "Cristina Dias", curso: "Biologia"
+		}, {
+			nome: "Sociologia Aplicada",
+			codigo: "SOC101",
+			cargahoraria: 50,
+			professor: "Roberto Fernandes",
+			curso: "Sociologia"
+		}, {
+			nome: "Engenharia de Software",
+			codigo: "CS801",
+			cargahoraria: 80,
+			professor: "Luana Machado",
+			curso: "Engenharia de Computação"
+		}, {
+			nome: "Empreendedorismo",
+			codigo: "ADM301",
+			cargahoraria: 60,
+			professor: "Gustavo Oliveira",
+			curso: "Administração"
+		}
+
+	];
+	TableCreator.create(disciplinas);
 });
 window.addEventListener("beforeunload", () =>
 {
@@ -30,6 +183,7 @@ class User
 	{
 		this.#name = value;
 	}
+
 	get password()
 	{
 		return this.#password;
@@ -39,6 +193,7 @@ class User
 	{
 		this.#password = value;
 	}
+
 	get email()
 	{
 		return this.#email;
@@ -54,6 +209,7 @@ class User
 class UserPool
 {
 	#users;
+
 	constructor()
 	{
 		this.#users = loadFromLocalStorage("users");
@@ -70,6 +226,7 @@ class UserPool
 		this.usuarios.push(usuario);
 		return this.isCadastrado(usuario) ? undefined : usuario;
 	}
+
 	removerUsuario(nome)
 	{
 		this.usuarios = this.usuarios.filter((user) => user != nome);
@@ -118,6 +275,92 @@ class Disciplinas
 		this.name = nome;
 		this.tipo = tipo;
 		this.detalhe = detalhe;
+	}
+}
+
+class TableCreator
+{
+	static currentPage = 1;
+	static filteredData;
+
+	static create(data)
+	{
+		this.itemsPerPage = Number(document.getElementById("itemsPerPage").value);
+		this.tableBody = document.getElementById("tableBody");
+		this.pagination = document.getElementById("pagination");
+		this.itemsPerPageSelector = document.getElementById("itemsPerPage");
+		this.searchBox = document.getElementById("searchBox");
+		this.filteredData = data;
+		this.data = data;
+
+		this.itemsPerPageSelector.addEventListener("change", this.handleItemsPerPageChange.bind(this));
+		this.pagination.addEventListener("click", this.handlePaginationClick.bind(this));
+		this.searchBox.addEventListener("input", this.handleSearch.bind(this));
+
+		this.updateTable();
+	}
+
+	static renderTable(page = 1)
+	{
+		const start = (page - 1) * this.itemsPerPage;
+		const end = start + this.itemsPerPage;
+		this.tableBody.innerHTML = this.filteredData
+			.slice(start, end)
+			.map(item =>
+			{
+				let stringReturn = "<tr>";
+				for (const attribute in item)
+				{
+					stringReturn += `<td>${item[attribute]}</td>`;
+				}
+
+				stringReturn += "</tr>";
+				return stringReturn;
+			}).join("");
+	}
+
+	static renderPagination()
+	{
+		const totalPages = Math.ceil(this.filteredData.length / this.itemsPerPage);
+		this.pagination.innerHTML = Array.from({length: totalPages}, (_, i) => `
+                      <li class="page-item ${i + 1 === this.currentPage ? "active" : ""}">
+                        <button class="page-link" data-page="${i + 1}">${i + 1}</button>
+                      </li>
+                `).join("");
+	}
+
+	static updateTable()
+	{
+		this.renderTable(this.currentPage);
+		this.renderPagination();
+	}
+
+	static handleItemsPerPageChange()
+	{
+		this.itemsPerPage = parseInt(this.itemsPerPageSelector.value);
+		this.currentPage = 1;
+		this.updateTable();
+	}
+
+	static handlePaginationClick(event)
+	{
+		if (event.target.tagName === "BUTTON")
+		{
+			this.currentPage = parseInt(event.target.dataset.page);
+			this.updateTable();
+		}
+	}
+
+	static handleSearch()
+	{
+		const query = this.searchBox.value.toLowerCase();
+		this.filteredData = this.data.filter(item =>
+			Object.values(item).some(value =>
+				typeof value === "string" && value.toLowerCase().includes(query)
+			)
+		);
+		this.currentPage = 1;
+		this.updateTable();
 	}
 }
 
@@ -249,9 +492,9 @@ function showLoggedNavBar()
 	}
 }
 
-function saveToLocalStorage(name,content)
+function saveToLocalStorage(name, content)
 {
-	localStorage.setItem(name,JSON.stringify(content));
+	localStorage.setItem(name, JSON.stringify(content));
 }
 
 function loadFromLocalStorage(name)

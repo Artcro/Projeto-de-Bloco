@@ -82,29 +82,83 @@
                     <form>
                         <div class="mb-3">
                             <label for="nome-disciplina" class="form-label">Nome da Disciplina: </label>
-                            <input type="text" class="form-control" id="nome-disciplina" placeholder="Nome da Disciplina">
+                            <input type="text" class="form-control" id="nome-disciplina"
+                                   placeholder="Nome da Disciplina">
                         </div>
                         <div class="mb-3">
                             <label for="codigo-disciplina" class="form-label">Código da Disciplina: </label>
-                            <input type="text" class="form-control" id="codigo-disciplina" placeholder="Sobreescrever o código automático">
+                            <input type="text" class="form-control" id="codigo-disciplina"
+                                   placeholder="Código da Disciplina">
                         </div>
                         <div class="mb-3">
-                            <label for="codigo-disciplina" class="form-label"> </label>
-                            <input type="text" class="form-control" id="codigo-disciplina" placeholder="Sobreescrever o código automático">
+                            <label for="cargaHoraria" class="form-label">Carga Horária: </label>
+                            <input type="number" class="form-control" id="cargaHoraria" placeholder="0">
                         </div>
-
+                        <div class="mb-3">
+                            <label for="professor-disciplina" class="form-label">Professor: </label>
+                            <select class="form-control" id="professor-disciplina">
+                                <option value="">Selecione</option>
+                            </select>
+                        </div>
+                        <div class="mb-3">
+                            <label for="curso-disciplina" class="form-label">Curso: </label>
+                            <select class="form-control" id="curso-disciplina">
+                                <option value="">Selecione</option>
+                            </select>
+                        </div>
+                        <div>
+                            <button type="submit" class="btn btn-primary">Cadastrar</button>
+                        </div>
                     </form>
                 </div>
             </div>
+        </div>
 
-            <!-- Display de Disciplinas -->
-            <div class="card">
-                <div class="card-header bg-primary text-white">Disciplinas Cadastradas</div>
-                <div class="card-body">
 
+        <!-- Display de Disciplinas -->
+        <div class="card">
+            <div class="card-header bg-primary text-white">Disciplinas Cadastradas</div>
+            <div class="card-body">
+                <div class="d-flex justify-content-between mb-3">
+                    <div>
+                        <label for="itemsPerPage" class="form-label">Itens por página:</label>
+                        <select id="itemsPerPage" class="form-select w-auto">
+                            <option value="10" selected>10</option>
+                            <option value="20">20</option>
+                            <option value="50">50</option>
+                        </select>
+                    </div>
+                    <input type="text" id="searchBox" class="form-control w-25" placeholder="Pesquisar...">
                 </div>
+
+                <!-- Table -->
+                <table class="table table-striped table-bordered">
+                    <thead>
+                    <tr>
+                        <th data-column="nome" data-order="asc" class="sortable">Nome</th>
+                        <th data-column="codigo" data-order="asc" class="sortable">Código</th>
+                        <th data-column="carga" data-order="asc" class="sortable">Carga Horária</th>
+                        <th data-column="professor" data-order="asc" class="sortable">Professor</th>
+                        <th data-column="curso" data-order="asc" class="sortable">Curso</th>
+                    </tr>
+                    </thead>
+                    <tbody id="tableBody">
+                    <!-- Rows dynamically generated -->
+                    </tbody>
+                </table>
+
+                <!-- Pagination -->
+                <nav>
+                    <ul class="pagination justify-content-center" id="pagination">
+                        <!-- Pagination items dynamically generated -->
+                    </ul>
+                </nav>
             </div>
         </div>
+    </div>
+
+    <!-- Bootstrap JS -->
+    <script src="https://cdn.jsdelivr.net/npm/bootstrap@5.3.0/dist/js/bootstrap.bundle.min.js"></script>
 </main>
 </body>
 </html>
