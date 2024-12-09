@@ -2,165 +2,32 @@
 window.addEventListener("load", () =>
 {
 	//showLoggedNavBar();
-	const disciplinas = [
-		{
-		nome: "Matemática Básica", codigo: "MAT101", cargahoraria: 60, professor: "João Silva", curso: "Engenharia"
-	}, {
-		nome: "Programação em JavaScript",
-		codigo: "CS102",
-		cargahoraria: 80,
-		professor: "Maria Oliveira",
-		curso: "Ciência da Computação"
-	}, {
-		nome: "Introdução à Física", codigo: "FIS201", cargahoraria: 40, professor: "Carlos Mendes", curso: "Física"
-	}, {
-		nome: "Química Geral", codigo: "QUI301", cargahoraria: 50, professor: "Ana Pereira", curso: "Química"
-	}, {
-		nome: "Algoritmos e Estruturas de Dados",
-		codigo: "CS202",
-		cargahoraria: 70,
-		professor: "Paulo Castro",
-		curso: "Engenharia de Software"
-	}, {
-		nome: "História da Arte", codigo: "ART101", cargahoraria: 45, professor: "Juliana Martins", curso: "Arquitetura"
-	}, {
-		nome: "Gestão de Projetos",
-		codigo: "ADM401",
-		cargahoraria: 60,
-		professor: "Rodrigo Almeida",
-		curso: "Administração"
-	}, {
-		nome: "Economia Básica", codigo: "ECO101", cargahoraria: 40, professor: "Fernanda Costa", curso: "Economia"
-	}, {
-		nome: "Sistemas Operacionais",
-		codigo: "CS301",
-		cargahoraria: 75,
-		professor: "Ricardo Lopes",
-		curso: "Engenharia de Computação"
-	}, {
-		nome: "Marketing Digital",
-		codigo: "MKT201",
-		cargahoraria: 50,
-		professor: "Mariana Ribeiro",
-		curso: "Publicidade e Propaganda"
-	}, {
-		nome: "Cálculo Diferencial e Integral I",
-		codigo: "MAT201",
-		cargahoraria: 90,
-		professor: "Luís Gonzaga",
-		curso: "Engenharia"
-	}, {
-		nome: "Estruturas de Dados Avançadas",
-		codigo: "CS302",
-		cargahoraria: 70,
-		professor: "Cláudia Torres",
-		curso: "Ciência da Computação"
-	}, {
-		nome: "Mecânica Clássica", codigo: "FIS301", cargahoraria: 50, professor: "Sérgio Nunes", curso: "Física"
-	}, {
-		nome: "Bioquímica", codigo: "BIO101", cargahoraria: 60, professor: "Patrícia Almeida", curso: "Biologia"
-	}, {
-		nome: "Geometria Analítica", codigo: "MAT202", cargahoraria: 45, professor: "André Barros", curso: "Matemática"
-	}, {
-		nome: "Banco de Dados Relacionais",
-		codigo: "CS402",
-		cargahoraria: 80,
-		professor: "Renato Silva",
-		curso: "Sistemas de Informação"
-	}, {
-		nome: "Eletromagnetismo",
-		codigo: "FIS401",
-		cargahoraria: 70,
-		professor: "Elis Regina",
-		curso: "Engenharia Elétrica"
-	}, {
-		nome: "Química Orgânica", codigo: "QUI201", cargahoraria: 50, professor: "Leonardo Lima", curso: "Química"
-	}, {
-		nome: "Redes de Computadores",
-		codigo: "CS502",
-		cargahoraria: 60,
-		professor: "Gabriela Souza",
-		curso: "Engenharia de Computação"
-	}, {
-		nome: "Introdução à Filosofia",
-		codigo: "FIL101",
-		cargahoraria: 40,
-		professor: "Antônio Carlos",
-		curso: "Filosofia"
-	}, {
-		nome: "Gestão Financeira",
-		codigo: "ADM201",
-		cargahoraria: 55,
-		professor: "Fernanda Melo",
-		curso: "Administração"
-	}, {
-		nome: "Teoria da Computação",
-		codigo: "CS601",
-		cargahoraria: 75,
-		professor: "Rafael Dantas",
-		curso: "Ciência da Computação"
-	}, {
-		nome: "Psicologia Organizacional",
-		codigo: "PSI301",
-		cargahoraria: 50,
-		professor: "Débora Costa",
-		curso: "Psicologia"
-	}, {
-		nome: "Lógica Matemática",
-		codigo: "MAT301",
-		cargahoraria: 60,
-		professor: "Marcelo Andrade",
-		curso: "Engenharia de Software"
-	}, {
-		nome: "Direito Empresarial", codigo: "DIR101", cargahoraria: 40, professor: "Paula Ribeiro", curso: "Direito"
-	}, {
-		nome: "Segurança da Informação",
-		codigo: "CS701",
-		cargahoraria: 65,
-		professor: "Marcos Tavares",
-		curso: "Sistemas de Informação"
-	}, {
-		nome: "Microbiologia", codigo: "BIO201", cargahoraria: 70, professor: "Cristina Dias", curso: "Biologia"
-	}, {
-		nome: "Sociologia Aplicada",
-		codigo: "SOC101",
-		cargahoraria: 50,
-		professor: "Roberto Fernandes",
-		curso: "Sociologia"
-	}, {
-		nome: "Engenharia de Software",
-		codigo: "CS801",
-		cargahoraria: 80,
-		professor: "Luana Machado",
-		curso: "Engenharia de Computação"
-	}, {
-		nome: "Empreendedorismo",
-		codigo: "ADM301",
-		cargahoraria: 60,
-		professor: "Gustavo Oliveira",
-		curso: "Administração"
-	}
-
-	];
-	//saveToLocalStorage("disciplinas", disciplinas);
-
-	if (document.getElementById("tableDisplay"))
+	headerUserDisplay();
+	const page = location.href.split("/").slice(-1)[0].split(".")[0];
+	switch (page)
 	{
-		TableCreator.create(MemoryStorage.disciplinas);
+		case "index":
+			break;
+		case "disciplinas":
+			pageDisciplinas();
+			break;
+		case "cursos":
+			break;
+		case "alunos":
+			pageAlunos();
+			break;
+		case "dashboard":
+			break;
+		case "professores":
+			break;
+		default:
+			window.location = "./index.html";
+			break;
 	}
-
-
-	document.getElementById("cadastrar-disciplina").addEventListener("click", () => {
-		const form = document.getElementById("form-disciplinas");
-		let inputs = [...form.getElementsByTagName("input")];
-		inputs = inputs.map(input => input.value);
-
-		console.log(new Disciplinas(...inputs))
-		MemoryStorage.disciplinas = new Disciplinas(...inputs);
-	})
 });
 window.addEventListener("beforeunload", () =>
 {
+
 })
 window.addEventListener("storage", (e) =>
 {
@@ -200,7 +67,27 @@ class MemoryStorage
 
 	static loadUsers()
 	{
-		this.#usuarios = loadFromLocalStorage("users");
+		if (loadFromLocalStorage("users") && loadFromLocalStorage("users") > 0)
+		{
+			loadFromLocalStorage("users").forEach(user =>
+			{
+				console.log(user["access"]);
+				switch (user["access"])
+				{
+					case "student":
+						this.#usuarios = new Student(user);
+						break;
+					case "teacher":
+						this.#usuarios = new Teacher(user);
+						break;
+					case "admin":
+						//this.usuarios = new Admin(user);
+						break;
+					default:
+						break;
+				}
+			});
+		}
 	}
 
 	static loadDisciplinas()
@@ -209,19 +96,25 @@ class MemoryStorage
 		{
 			loadFromLocalStorage("disciplinas").forEach(disciplina =>
 			{
-				this.disciplinas = new Disciplinas(disciplina);
+				this.#disciplinas = new Disciplinas(disciplina);
 			});
 		}
 	}
 
 	static loadCursos()
 	{
-		this.#cursos = loadFromLocalStorage("cursos");
+		if (loadFromLocalStorage("cursos") && loadFromLocalStorage("cursos") > 0)
+		{
+			loadFromLocalStorage("cursos").forEach(curso =>
+			{
+				//this.#cursos = new Course(curso);
+			});
+		}
 	}
 
 	static get usuarios()
 	{
-		if(this.#usuarios.length < 1)
+		if (this.#usuarios.length < 1)
 		{
 			this.loadUsers();
 		}
@@ -230,7 +123,7 @@ class MemoryStorage
 
 	static get disciplinas()
 	{
-		if(this.#disciplinas.length < 1)
+		if (this.#disciplinas.length < 1)
 		{
 			this.loadDisciplinas();
 		}
@@ -239,7 +132,7 @@ class MemoryStorage
 
 	static get cursos()
 	{
-		if(this.#cursos.length < 1)
+		if (this.#cursos.length < 1)
 		{
 			this.loadCursos();
 		}
@@ -248,6 +141,7 @@ class MemoryStorage
 
 	static set usuarios(value)
 	{
+		console.log("here");
 		this.#usuarios.push(value);
 		saveToLocalStorage("users", this.#usuarios);
 	}
@@ -263,7 +157,6 @@ class MemoryStorage
 		this.#cursos.push(value);
 		saveToLocalStorage("cursos", this.#cursos)
 	}
-
 }
 
 class User
@@ -336,63 +229,63 @@ class User
 
 class Student extends User
 {
-	#matricula;
-	#curso;
-	#periodo;
-	#disciplinas = [];
+	matricula;
+	curso;
+	periodo;
+	disciplinas = [];
 
-	constructor(username, password, name, matricula)
+	constructor(username, name, matricula)
 	{
-		super(username, password, "student", name);
-		this.#matricula = matricula;
+		super(username, "", "student", name);
+		this.matricula = matricula;
 	}
 
 
 	get matricula()
 	{
-		return this.#matricula;
+		return this.matricula;
 	}
 
 	set matricula(value)
 	{
-		this.#matricula = value;
+		this.matricula = value;
 	}
 
 	get curso()
 	{
-		return this.#curso;
+		return this.curso;
 	}
 
 	set curso(value)
 	{
-		this.#curso = value;
+		this.curso = value;
 	}
 
 	get periodo()
 	{
-		return this.#periodo;
+		return this.periodo;
 	}
 
 	set periodo(value)
 	{
-		this.#periodo = value;
+		this.periodo = value;
 	}
 
 	get disciplinas()
 	{
-		return this.#disciplinas;
+		return this.disciplinas;
 	}
 
 	set adicionarDisciplinas(value)
 	{
-		this.#disciplinas.push(value);
+		this.disciplinas.push(value);
 	}
 }
 
 class Teacher extends User
 {
-	#departamento
-	#disciplinas = [];
+	departamento
+	disciplinas = [];
 
 	constructor(username, password, name)
 	{
@@ -402,22 +295,22 @@ class Teacher extends User
 
 	get departamento()
 	{
-		return this.#departamento;
+		return this.departamento;
 	}
 
 	set departamento(value)
 	{
-		this.#departamento = value;
+		this.departamento = value;
 	}
 
 	get disciplinas()
 	{
-		return this.#disciplinas;
+		return this.disciplinas;
 	}
 
 	set adicionarDisciplinas(value)
 	{
-		this.#disciplinas.push(value);
+		this.disciplinas.push(value);
 	}
 
 
@@ -495,79 +388,92 @@ class Disciplinas
 class TableCreator
 {
 	static currentPage = 1;
+	static itemsPerPage = 10;
+	static data = [];
+	static columns = [];
+	static filteredData = [];
+	static tableBody = null;
+	static pagination = null;
+	static itemsPerPageSelector = null;
+	static searchBox = null;
 
-	static create(data)
-	{
-		this.itemsPerPage = Number(document.getElementById("itemsPerPage").value);
+	static initialize(config) {
+		// Set configuration
+		this.data = config.data || [];
+		this.columns = config.columns || [];
+		this.itemsPerPage = config.itemsPerPage || 10;
+
+		// Set DOM elements
 		this.tableBody = document.getElementById("tableBody");
 		this.pagination = document.getElementById("pagination");
 		this.itemsPerPageSelector = document.getElementById("itemsPerPage");
 		this.searchBox = document.getElementById("searchBox");
-		this.filteredData = data;
-		this.data = data;
 
-		this.itemsPerPageSelector.addEventListener("change", this.handleItemsPerPageChange.bind(this));
-		this.pagination.addEventListener("click", this.handlePaginationClick.bind(this));
-		this.searchBox.addEventListener("input", this.handleSearch.bind(this));
+		this.filteredData = [...this.data];
+
+		// Add event listeners
+		if (this.itemsPerPageSelector) {
+			this.itemsPerPageSelector.addEventListener("change", this.handleItemsPerPageChange.bind(this));
+		}
+		if (this.pagination) {
+			this.pagination.addEventListener("click", this.handlePaginationClick.bind(this));
+		}
+		if (this.searchBox) {
+			this.searchBox.addEventListener("input", this.handleSearch.bind(this));
+		}
 
 		this.updateTable();
 	}
 
-	static renderTable(page = 1)
-	{
+	static renderTable(page = 1) {
 		const start = (page - 1) * this.itemsPerPage;
 		const end = start + this.itemsPerPage;
+
+		// Generate table rows dynamically based on columns
 		this.tableBody.innerHTML = this.filteredData
 			.slice(start, end)
-			.map(item =>
-			{
-				let stringReturn = "<tr>";
-				for (const attribute in item)
-				{
-					stringReturn += `<td>${item[attribute]}</td>`;
-				}
-
-				stringReturn += "</tr>";
-				return stringReturn;
-			}).join("");
+			.map(item => {
+				const row = this.columns.map(column => `<td>${item[column] || ''}</td>`).join("");
+				return `<tr>${row}</tr>`;
+			})
+			.join("");
 	}
 
-	static renderPagination()
-	{
+	static renderPagination() {
 		const totalPages = Math.ceil(this.filteredData.length / this.itemsPerPage);
-		this.pagination.innerHTML = Array.from({length: totalPages}, (_, i) => `
-                      <li class="page-item ${i + 1 === this.currentPage ? "active" : ""}">
-                        <button class="page-link" data-page="${i + 1}">${i + 1}</button>
-                      </li>
-                `).join("");
+		this.pagination.innerHTML = Array.from({ length: totalPages }, (_, i) => `
+            <li class="page-item ${i + 1 === this.currentPage ? "active" : ""}">
+                <button class="page-link" data-page="${i + 1}">${i + 1}</button>
+            </li>
+        `).join("");
 	}
 
-	static updateTable()
-	{
+	static updateTable() {
 		this.renderTable(this.currentPage);
 		this.renderPagination();
 	}
 
-	static handleItemsPerPageChange()
-	{
+	static handleItemsPerPageChange() {
 		this.itemsPerPage = parseInt(this.itemsPerPageSelector.value);
 		this.currentPage = 1;
 		this.updateTable();
 	}
 
-	static handlePaginationClick(event)
-	{
-		if (event.target.tagName === "BUTTON")
-		{
+	static handlePaginationClick(event) {
+		if (event.target.tagName === "BUTTON") {
 			this.currentPage = parseInt(event.target.dataset.page);
 			this.updateTable();
 		}
 	}
 
-	static handleSearch()
-	{
+	static handleSearch() {
 		const query = this.searchBox.value.toLowerCase();
-		this.filteredData = this.data.filter(item => Object.values(item).some(value => typeof value === "string" && value.toLowerCase().includes(query)));
+		this.filteredData = this.data.filter(item =>
+			this.columns.some(column => {
+				const value = item[column];
+				return typeof value === "string" && value.toLowerCase().includes(query);
+			})
+		);
 		this.currentPage = 1;
 		this.updateTable();
 	}
@@ -698,4 +604,108 @@ function saveToLocalStorage(name, content)
 function loadFromLocalStorage(name)
 {
 	return JSON.parse(localStorage.getItem(name))
+}
+
+function headerUserDisplay()
+{
+
+}
+
+function pageDisciplinas()
+{
+	if (document.getElementById("tableDisplay"))
+	{
+		TableCreator.initialize(MemoryStorage.disciplinas);
+
+		document.getElementById("cadastrar-disciplina").addEventListener("click", () =>
+		{
+			const form = document.getElementById("form-disciplinas");
+			let inputs = [...form.getElementsByTagName("input"),...form.getElementsByTagName("select")];
+			inputs = inputs.map(input => input.value);
+			MemoryStorage.disciplinas = new Disciplinas();
+		})
+	}
+}
+
+function pageAlunos()
+{
+	if (document.getElementById("tableDisplay"))
+	{
+		const tableConfig = {
+			data: MemoryStorage.usuarios,
+			columns: ["id", "name"], // Specify which columns to display
+			itemsPerPage: 5
+		};
+
+		TableCreator.initialize(tableConfig);
+	}
+
+	document.getElementById("cadastrar-aluno").addEventListener("click", () =>{
+		const username = checkInput("user-aluno");
+		const name = checkInput("nome-aluno");
+		const matricula = checkInput("matricula-aluno");
+
+		const email = checkInput("email-aluno");
+		const curso = checkInput("curso-aluno");
+
+		const aluno = new Student(username,name,matricula);
+
+		MemoryStorage.usuarios = aluno;
+
+		aluno.email = email;
+		aluno.curso = curso;
+
+		console.log(MemoryStorage.usuarios);
+
+
+	})
+}
+
+function pageProfessores()
+{
+
+}
+
+function pageCursos()
+{
+
+}
+
+function pageDashboard()
+{
+
+}
+
+async function hashPasswordWithSalt(password, salt) {
+	const encoder = new TextEncoder();
+	const saltedPassword = password + salt; // Combine password and salt
+	const data = encoder.encode(saltedPassword);
+	const hashBuffer = await crypto.subtle.digest('SHA-256', data);
+	const hashArray = Array.from(new Uint8Array(hashBuffer));
+	return hashArray.map(byte => byte.toString(16).padStart(2, '0')).join('');
+}
+
+// Generate a random salt
+function generateSalt(length = 16) {
+	const charset = 'ABCDEFGHIJKLMNOPQRSTUVWXYZabcdefghijklmnopqrstuvwxyz0123456789';
+	let salt = '';
+	for (let i = 0; i < length; i++) {
+		const randomIndex = Math.floor(Math.random() * charset.length);
+		salt += charset[randomIndex];
+	}
+	return salt;
+}
+
+function checkInput(inputName,text)
+{
+	let input = document.getElementById(inputName);
+	let value = input.value;
+
+	if(!value)
+	{
+		alert("Por favor preencha o campo!");
+		return;
+	}
+
+	return value;
 }

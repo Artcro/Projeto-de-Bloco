@@ -1,0 +1,194 @@
+<!--const disciplinas = [-->
+<!--{-->
+<!--nome: "Matemática Básica", codigo: "MAT101", cargahoraria: 60, professor: "João Silva", curso: "Engenharia"-->
+<!--}, {-->
+<!--nome: "Programação em JavaScript",-->
+<!--codigo: "CS102",-->
+<!--cargahoraria: 80,-->
+<!--professor: "Maria Oliveira",-->
+<!--curso: "Ciência da Computação"-->
+<!--}, {-->
+<!--nome: "Introdução à Física", codigo: "FIS201", cargahoraria: 40, professor: "Carlos Mendes", curso: "Física"-->
+<!--}, {-->
+<!--nome: "Química Geral", codigo: "QUI301", cargahoraria: 50, professor: "Ana Pereira", curso: "Química"-->
+<!--}, {-->
+<!--nome: "Algoritmos e Estruturas de Dados",-->
+<!--codigo: "CS202",-->
+<!--cargahoraria: 70,-->
+<!--professor: "Paulo Castro",-->
+<!--curso: "Engenharia de Software"-->
+<!--}, {-->
+<!--nome: "História da Arte", codigo: "ART101", cargahoraria: 45, professor: "Juliana Martins", curso: "Arquitetura"-->
+<!--}, {-->
+<!--nome: "Gestão de Projetos",-->
+<!--codigo: "ADM401",-->
+<!--cargahoraria: 60,-->
+<!--professor: "Rodrigo Almeida",-->
+<!--curso: "Administração"-->
+<!--}, {-->
+<!--nome: "Economia Básica", codigo: "ECO101", cargahoraria: 40, professor: "Fernanda Costa", curso: "Economia"-->
+<!--}, {-->
+<!--nome: "Sistemas Operacionais",-->
+<!--codigo: "CS301",-->
+<!--cargahoraria: 75,-->
+<!--professor: "Ricardo Lopes",-->
+<!--curso: "Engenharia de Computação"-->
+<!--}, {-->
+<!--nome: "Marketing Digital",-->
+<!--codigo: "MKT201",-->
+<!--cargahoraria: 50,-->
+<!--professor: "Mariana Ribeiro",-->
+<!--curso: "Publicidade e Propaganda"-->
+<!--}, {-->
+<!--nome: "Cálculo Diferencial e Integral I",-->
+<!--codigo: "MAT201",-->
+<!--cargahoraria: 90,-->
+<!--professor: "Luís Gonzaga",-->
+<!--curso: "Engenharia"-->
+<!--}, {-->
+<!--nome: "Estruturas de Dados Avançadas",-->
+<!--codigo: "CS302",-->
+<!--cargahoraria: 70,-->
+<!--professor: "Cláudia Torres",-->
+<!--curso: "Ciência da Computação"-->
+<!--}, {-->
+<!--nome: "Mecânica Clássica", codigo: "FIS301", cargahoraria: 50, professor: "Sérgio Nunes", curso: "Física"-->
+<!--}, {-->
+<!--nome: "Bioquímica", codigo: "BIO101", cargahoraria: 60, professor: "Patrícia Almeida", curso: "Biologia"-->
+<!--}, {-->
+<!--nome: "Geometria Analítica", codigo: "MAT202", cargahoraria: 45, professor: "André Barros", curso: "Matemática"-->
+<!--}, {-->
+<!--nome: "Banco de Dados Relacionais",-->
+<!--codigo: "CS402",-->
+<!--cargahoraria: 80,-->
+<!--professor: "Renato Silva",-->
+<!--curso: "Sistemas de Informação"-->
+<!--}, {-->
+<!--nome: "Eletromagnetismo",-->
+<!--codigo: "FIS401",-->
+<!--cargahoraria: 70,-->
+<!--professor: "Elis Regina",-->
+<!--curso: "Engenharia Elétrica"-->
+<!--}, {-->
+<!--nome: "Química Orgânica", codigo: "QUI201", cargahoraria: 50, professor: "Leonardo Lima", curso: "Química"-->
+<!--}, {-->
+<!--nome: "Redes de Computadores",-->
+<!--codigo: "CS502",-->
+<!--cargahoraria: 60,-->
+<!--professor: "Gabriela Souza",-->
+<!--curso: "Engenharia de Computação"-->
+<!--}, {-->
+<!--nome: "Introdução à Filosofia",-->
+<!--codigo: "FIL101",-->
+<!--cargahoraria: 40,-->
+<!--professor: "Antônio Carlos",-->
+<!--curso: "Filosofia"-->
+<!--}, {-->
+<!--nome: "Gestão Financeira",-->
+<!--codigo: "ADM201",-->
+<!--cargahoraria: 55,-->
+<!--professor: "Fernanda Melo",-->
+<!--curso: "Administração"-->
+<!--}, {-->
+<!--nome: "Teoria da Computação",-->
+<!--codigo: "CS601",-->
+<!--cargahoraria: 75,-->
+<!--professor: "Rafael Dantas",-->
+<!--curso: "Ciência da Computação"-->
+<!--}, {-->
+<!--nome: "Psicologia Organizacional",-->
+<!--codigo: "PSI301",-->
+<!--cargahoraria: 50,-->
+<!--professor: "Débora Costa",-->
+<!--curso: "Psicologia"-->
+<!--}, {-->
+<!--nome: "Lógica Matemática",-->
+<!--codigo: "MAT301",-->
+<!--cargahoraria: 60,-->
+<!--professor: "Marcelo Andrade",-->
+<!--curso: "Engenharia de Software"-->
+<!--}, {-->
+<!--nome: "Direito Empresarial", codigo: "DIR101", cargahoraria: 40, professor: "Paula Ribeiro", curso: "Direito"-->
+<!--}, {-->
+<!--nome: "Segurança da Informação",-->
+<!--codigo: "CS701",-->
+<!--cargahoraria: 65,-->
+<!--professor: "Marcos Tavares",-->
+<!--curso: "Sistemas de Informação"-->
+<!--}, {-->
+<!--nome: "Microbiologia", codigo: "BIO201", cargahoraria: 70, professor: "Cristina Dias", curso: "Biologia"-->
+<!--}, {-->
+<!--nome: "Sociologia Aplicada",-->
+<!--codigo: "SOC101",-->
+<!--cargahoraria: 50,-->
+<!--professor: "Roberto Fernandes",-->
+<!--curso: "Sociologia"-->
+<!--}, {-->
+<!--nome: "Engenharia de Software",-->
+<!--codigo: "CS801",-->
+<!--cargahoraria: 80,-->
+<!--professor: "Luana Machado",-->
+<!--curso: "Engenharia de Computação"-->
+<!--}, {-->
+<!--nome: "Empreendedorismo",-->
+<!--codigo: "ADM301",-->
+<!--cargahoraria: 60,-->
+<!--professor: "Gustavo Oliveira",-->
+<!--curso: "Administração"-->
+<!--}-->
+
+<!--];-->
+
+<!DOCTYPE html>
+<html lang="en">
+<head>
+    <meta charset="UTF-8">
+    <meta content="width=device-width, initial-scale=1.0" name="viewport">
+    <title>Tabela com Ordenação</title>
+    <!-- Bootstrap CSS -->
+    <link href="https://cdn.jsdelivr.net/npm/bootstrap@5.3.0/dist/css/bootstrap.min.css" rel="stylesheet">
+</head>
+<body>
+<div class="container my-4">
+    <h2 class="text-center">Tabela com Paginação e Ordenação</h2>
+
+    <!-- Items Per Page Selector -->
+    <div class="d-flex justify-content-between mb-3">
+        <div>
+            <label class="form-label" for="itemsPerPage">Itens por página:</label>
+            <select class="form-select w-auto" id="itemsPerPage">
+                <option selected value="10">10</option>
+                <option value="20">20</option>
+                <option value="50">50</option>
+            </select>
+        </div>
+        <input class="form-control w-25" id="searchBox" placeholder="Pesquisar..." type="text">
+    </div>
+
+    <!-- Table -->
+    <table class="table table-striped table-bordered">
+        <thead>
+        <tr>
+            <th class="sortable" data-column="id" data-order="asc">#</th>
+            <th class="sortable" data-column="name" data-order="asc">Nome</th>
+            <th class="sortable" data-column="email" data-order="asc">Email</th>
+            <th class="sortable" data-column="age" data-order="asc">Idade</th>
+        </tr>
+        </thead>
+        <tbody id="tableBody">
+        <!-- Rows dynamically generated -->
+        </tbody>
+    </table>
+
+    <!-- Pagination -->
+    <nav>
+        <ul class="pagination justify-content-center" id="pagination">
+            <!-- Pagination items dynamically generated -->
+        </ul>
+    </nav>
+</div>
+
+<!-- Bootstrap JS -->
+<script src="https://cdn.jsdelivr.net/npm/bootstrap@5.3.0/dist/js/bootstrap.bundle.min.js"></script>
+</body>
+</html>
