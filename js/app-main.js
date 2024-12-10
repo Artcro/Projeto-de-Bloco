@@ -514,14 +514,19 @@ function headerUserDisplay() {
         const type = document.getElementById("header-user-type");
         const img = document.getElementById("header-user-img");
         const dropdown = document.getElementById("header-user-dropdown");
+        const a = document.getElementById("header-user-action");
 
         let user = MemoryStorage.getSessionUser();
 
-        name.textContent = capitalizeFirstLetter(user.name);
-        type.textContent = capitalizeFirstLetter(user.type);
-        //img.src = user.img;
-
-        //<li><a className="dropdown-item" href="#">Sign out</a></li>
+        if (user){
+            name.textContent = capitalizeFirstLetter(user.name);
+            type.textContent = capitalizeFirstLetter(user.access);
+            //img.src = user.img;
+            dropdown.innerHTML = `
+            <li><a class="dropdown-item" href="#" onclick="logout()">Sign out</a></li>
+            `
+            a.setAttribute("data-bs-toggle", "dropdown");
+        }
     }
 }
 
@@ -635,7 +640,7 @@ function pageAdmin() {
             switch (access) {
                 case "admin":
                     user = new User(
-                        {id, username, hash, email: undefined, access, name});
+                        {id, username, hash, email: undefined, access: "admin", name});
                     break;
                 case "teacher":
                     user = new Teacher({

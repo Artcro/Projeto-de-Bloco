@@ -61,11 +61,11 @@
 			            </span>
                     </div>
                     <a aria-expanded="false"
-                       class="d-block text-decoration-none dropdown-toggle link-white">
+                       class="d-block text-decoration-none dropdown-toggle link-white" id="header-user-action">
                         <img alt="mdo" class="rounded-circle" height="32" src="./img/perfil.webp" width="32">
                     </a>
                     <!-- Profile DropDown -->
-                    <ul class="dropdown-menu text-small">
+                    <ul class="dropdown-menu text-small" id="header-user-dropdown">
                     </ul>
                 </div>
             </div>
@@ -109,9 +109,9 @@
                                    type="password" value="Croce">
                         </div>
                         <div class="d-grid">
-                            <button class="btn btn-primary" type="submit" id="login">Entrar</button>
+                            <button class="btn btn-primary" id="login" type="submit">Entrar</button>
                         </div>
-                        <div id="loginMessage" class="mt-3 mb-0"></div>
+                        <div class="mt-3 mb-0" id="loginMessage"></div>
                     </div>
                 </div>
             </div>
