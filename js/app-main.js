@@ -1,711 +1,693 @@
 //canLoadProtectedPage();
-window.addEventListener("load", () =>
-{
-	//showLoggedNavBar();
-	headerUserDisplay();
-	const page = location.href.split("/").slice(-1)[0].split(".")[0];
-	switch (page)
-	{
-		case "index":
-			break;
-		case "disciplinas":
-			pageDisciplinas();
-			break;
-		case "cursos":
-			break;
-		case "alunos":
-			pageAlunos();
-			break;
-		case "dashboard":
-			break;
-		case "professores":
-			break;
-		default:
-			window.location = "./index.html";
-			break;
-	}
+window.addEventListener("load", () => {
+    //showLoggedNavBar();
+    headerUserDisplay();
+    const page = location.href.split("/").slice(-1)[0].split(".")[0];
+
+    const pageActions = {
+        index: pageIndex,
+        disciplinas: pageDisciplinas,
+        alunos: pageAlunos,
+        admin: pageAdmin,
+        dashboard: pageDashboard,
+    };
+
+    (pageActions[page] || (() => {
+        window.location = "./index.html";
+    }))();
 });
-window.addEventListener("beforeunload", () =>
-{
+window.addEventListener("beforeunload", () => {
 
 })
-window.addEventListener("storage", (e) =>
-{
+window.addEventListener("storage", (e) => {
 
-	MemoryStorage.load(e);
+    MemoryStorage.load(e);
 
-	// console.log(e.key);
-	// console.log(e.newValue);
-	// console.log(e.oldValue);
-	// console.log(e.storageArea);
-	// console.log(e.url);
+    // console.log(e.key);
+    // console.log(e.newValue);
+    // console.log(e.oldValue);
+    // console.log(e.storageArea);
+    // console.log(e.url);
 })
 
-class MemoryStorage
-{
-	static #usuarios = [];
-	static #disciplinas = [];
-	static #cursos = [];
+let tableSectionElement = [];
+let dbUsers = "users";
+let dbDisciplinas = "disciplinas";
+let dbCursos = "cursos";
 
-	static load(e)
-	{
-		switch (e.key)
-		{
-			case "users":
-				this.loadUsers();
-				break;
-			case "disciplinas":
-				this.loadDisciplinas();
-				break;
-			case "cursos":
-				this.loadCursos();
-				break;
-			default:
-				break;
-		}
-	}
+class MemoryStorage {
+    static #usuarios = [];
+    static #disciplinas = [];
+    static #cursos = [];
+    
+    static get usuarios() {
+        if (this.#usuarios.length < 1) {
+            this.loadUsers();
+        }
+        return this.#usuarios;
+    }
 
-	static loadUsers()
-	{
-		if (loadFromLocalStorage("users") && loadFromLocalStorage("users") > 0)
-		{
-			loadFromLocalStorage("users").forEach(user =>
-			{
-				console.log(user["access"]);
-				switch (user["access"])
-				{
-					case "student":
-						this.#usuarios = new Student(user);
-						break;
-					case "teacher":
-						this.#usuarios = new Teacher(user);
-						break;
-					case "admin":
-						//this.usuarios = new Admin(user);
-						break;
-					default:
-						break;
-				}
-			});
-		}
-	}
+    static set usuarios(value) {
+        this.loadUsers();
+        this.#usuarios.push(value);
+        saveToLocalStorage(dbUsers, this.#usuarios);
+    }
 
-	static loadDisciplinas()
-	{
-		if (loadFromLocalStorage("disciplinas") && loadFromLocalStorage("disciplinas") > 0)
-		{
-			loadFromLocalStorage("disciplinas").forEach(disciplina =>
-			{
-				this.#disciplinas = new Disciplinas(disciplina);
-			});
-		}
-	}
+    static get disciplinas() {
+        if (this.#disciplinas.length < 1) {
+            this.loadDisciplinas();
+        }
+        return this.#disciplinas;
+    }
 
-	static loadCursos()
-	{
-		if (loadFromLocalStorage("cursos") && loadFromLocalStorage("cursos") > 0)
-		{
-			loadFromLocalStorage("cursos").forEach(curso =>
-			{
-				//this.#cursos = new Course(curso);
-			});
-		}
-	}
+    static set disciplinas(value) {
+        this.loadDisciplinas();
+        this.#disciplinas.push(value);
+        saveToLocalStorage(dbDisciplinas, this.#disciplinas);
+    }
 
-	static get usuarios()
-	{
-		if (this.#usuarios.length < 1)
-		{
-			this.loadUsers();
-		}
-		return this.#usuarios;
-	}
+    static get cursos() {
+        if (this.#cursos.length < 1) {
+            this.loadCursos();
+        }
+        return this.#cursos;
+    }
 
-	static get disciplinas()
-	{
-		if (this.#disciplinas.length < 1)
-		{
-			this.loadDisciplinas();
-		}
-		return this.#disciplinas;
-	}
+    static set cursos(value) {
+        this.loadCursos();
+        this.#cursos.push(value);
+        saveToLocalStorage(dbCursos, this.#cursos)
+    }
 
-	static get cursos()
-	{
-		if (this.#cursos.length < 1)
-		{
-			this.loadCursos();
-		}
-		return this.#cursos;
-	}
+    static load(e) {
+        switch (e.key) {
+            case dbUsers:
+                this.loadUsers();
+                break;
+            case dbDisciplinas:
+                this.loadDisciplinas();
+                break;
+            case dbCursos:
+                this.loadCursos();
+                break;
+            default:
+                break;
+        }
+    }
 
-	static set usuarios(value)
-	{
-		console.log("here");
-		this.#usuarios.push(value);
-		saveToLocalStorage("users", this.#usuarios);
-	}
+    static loadUsers() {
+        const loaded = loadFromLocalStorage(dbUsers);
+        if (loaded) {
+            this.#usuarios = [];
 
-	static set disciplinas(value)
-	{
-		this.#disciplinas.push(value);
-		saveToLocalStorage("disciplinas", this.#disciplinas);
-	}
+            const userTypes = {
+                student: Student, teacher: Teacher, admin: User,
+            };
 
-	static set cursos(value)
-	{
-		this.#cursos.push(value);
-		saveToLocalStorage("cursos", this.#cursos)
-	}
+            loaded.forEach(user => {
+                const UserClass = userTypes[user.access];
+                if (UserClass) {
+                    this.#usuarios.push(new UserClass(user));
+                }
+            });
+        }
+    }
+
+    static loadDisciplinas() {
+        if (loadFromLocalStorage(dbDisciplinas) && loadFromLocalStorage(dbDisciplinas) > 0) {
+            loadFromLocalStorage(dbDisciplinas).forEach(disciplina => {
+                this.#disciplinas = new Disciplinas(disciplina);
+            });
+        }
+    }
+
+    static loadCursos() {
+        if (loadFromLocalStorage(dbCursos) && loadFromLocalStorage(dbCursos) > 0) {
+            loadFromLocalStorage(dbCursos).forEach(curso => {
+                //this.#cursos = new Course(curso);
+            });
+        }
+    }
+
+    static getId() {
+        const loaded = loadFromLocalStorage(dbUsers);
+        if (loaded) {
+            return Math.max(...loaded.map(user => user.id)) + 1;
+        }
+        return 0;
+    }
+
+    static getMatricula() {
+        const loaded = loadFromLocalStorage(dbUsers);
+        if (loaded) {
+            const matriculas = loaded
+                .filter(user => user.access == "student")
+                .map(user => user.matricula);
+
+            return Math.max(...matriculas) + 1;
+        }
+        return 10000;
+    }
+
+    static canHaveUsername(username) {
+        const loaded = loadFromLocalStorage(dbUsers) || [];
+        if (loaded) {
+            const users = loaded
+                .map(user => user.username)
+                .includes(username);
+
+            return !users;
+        }
+        return false;
+    }
+    
+    static getSessionUser() {
+        let session = sessionStorage.getItem("loginSession");
+        if (session) {
+            return this.usuarios.find(user => user.id == session);
+        }
+        return undefined;
+    }
 }
 
-class User
-{
-	id;
-	username;
-	email;
-	password;
-	access;
-	name;
+class User {
+    id;
+    username;
+    email;
+    password;
+    access;
+    name;
 
-	constructor(username, password, access, name)
-	{
-		this.username = username;
-		this.password = password;
-		this.access = access;
-		this.name = name;
-	}
+    constructor({id, username, password, email, access, name}) {
+        this.id = id;
+        this.username = username;
+        this.password = password;
+        this.email = email;
+        this.access = access;
+        this.name = name;
+    }
 
-	get id()
-	{
-		return this.id;
-	}
+    get id() {
+        return this.id;
+    }
 
-	set id(value)
-	{
-		this.id = value;
-	}
+    set id(value) {
+        this.id = value;
+    }
 
-	get username()
-	{
-		return this.username;
-	}
+    get username() {
+        return this.username;
+    }
 
-	set username(value)
-	{
-		this.username = value;
-	}
+    set username(value) {
+        this.username = value;
+    }
 
-	get password()
-	{
-		return this.password;
-	}
+    get password() {
+        return this.password;
+    }
 
-	set password(value)
-	{
-		this.password = value;
-	}
+    set password(value) {
+        this.password = value;
+    }
 
-	get email()
-	{
-		return this.email;
-	}
+    get email() {
+        return this.email;
+    }
 
-	set email(value)
-	{
-		this.email = value;
-	}
+    set email(value) {
+        this.email = value;
+    }
 
-	get access()
-	{
-		return this.access;
-	}
+    get access() {
+        return this.access;
+    }
 
-	set access(value)
-	{
-		this.access = value;
-	}
+    set access(value) {
+        this.access = value;
+    }
 }
 
-class Student extends User
-{
-	matricula;
-	curso;
-	periodo;
-	disciplinas = [];
+class Student extends User {
+    matricula;
+    curso;
+    periodo;
+    disciplinas = [];
 
-	constructor(username, name, matricula)
-	{
-		super(username, "", "student", name);
-		this.matricula = matricula;
-	}
+    constructor({id, username, password, email, name, matricula, curso, periodo, disciplinas}) {
+        super({id, username, password, email, access: "student", name});
+        this.matricula = matricula;
+        this.curso = curso;
+        this.periodo = periodo;
+        this.disciplinas = disciplinas;
+    }
 
 
-	get matricula()
-	{
-		return this.matricula;
-	}
+    get matricula() {
+        return this.matricula;
+    }
 
-	set matricula(value)
-	{
-		this.matricula = value;
-	}
+    set matricula(value) {
+        this.matricula = value;
+    }
 
-	get curso()
-	{
-		return this.curso;
-	}
+    get curso() {
+        return this.curso;
+    }
 
-	set curso(value)
-	{
-		this.curso = value;
-	}
+    set curso(value) {
+        this.curso = value;
+    }
 
-	get periodo()
-	{
-		return this.periodo;
-	}
+    get periodo() {
+        return this.periodo;
+    }
 
-	set periodo(value)
-	{
-		this.periodo = value;
-	}
+    set periodo(value) {
+        this.periodo = value;
+    }
 
-	get disciplinas()
-	{
-		return this.disciplinas;
-	}
+    get disciplinas() {
+        return this.disciplinas;
+    }
 
-	set adicionarDisciplinas(value)
-	{
-		this.disciplinas.push(value);
-	}
+    set adicionarDisciplinas(value) {
+        this.disciplinas.push(value);
+    }
 }
 
-class Teacher extends User
-{
-	departamento
-	disciplinas = [];
+class Teacher extends User {
+    departamento
+    disciplinas = [];
 
-	constructor(username, password, name)
-	{
-		super(username, password, "teacher", name);
-	}
-
-
-	get departamento()
-	{
-		return this.departamento;
-	}
-
-	set departamento(value)
-	{
-		this.departamento = value;
-	}
-
-	get disciplinas()
-	{
-		return this.disciplinas;
-	}
-
-	set adicionarDisciplinas(value)
-	{
-		this.disciplinas.push(value);
-	}
+    constructor({id, username, password, email, name, departamento, disciplinas}) {
+        super({id, username, password, email, access: "teacher", name});
+        this.departamento = departamento;
+        this.disciplinas = disciplinas;
+    }
 
 
-}
+    get departamento() {
+        return this.departamento;
+    }
 
-class Disciplinas
-{
-	id;
-	name;
-	workload;
-	teacherId;
-	courseId;
+    set departamento(value) {
+        this.departamento = value;
+    }
 
-	constructor(name, codigo, workload, teacher, course)
-	{
-		this.name = name;
-		this.id = codigo;
-		this.workload = workload;
-		this.teacherId = teacher;
-		this.courseId = course;
-	}
+    get disciplinas() {
+        return this.disciplinas;
+    }
 
-	get id()
-	{
-		return this.id;
-	}
+    set adicionarDisciplinas(value) {
+        this.disciplinas.push(value);
+    }
 
-	set id(value)
-	{
-		this.id = value;
-	}
-
-	get name()
-	{
-		return this.name;
-	}
-
-	set name(value)
-	{
-		this.name = value;
-	}
-
-	get workload()
-	{
-		return this.workload;
-	}
-
-	set workload(value)
-	{
-		this.workload = value;
-	}
-
-	get teacherId()
-	{
-		return this.teacherId;
-	}
-
-	set teacherId(value)
-	{
-		this.teacherId = value;
-	}
-
-	get courseId()
-	{
-		return this.courseId;
-	}
-
-	set courseId(value)
-	{
-		this.courseId = value;
-	}
 
 }
 
-class TableCreator
-{
-	static currentPage = 1;
-	static itemsPerPage = 10;
-	static data = [];
-	static columns = [];
-	static filteredData = [];
-	static tableBody = null;
-	static pagination = null;
-	static itemsPerPageSelector = null;
-	static searchBox = null;
+class Disciplinas {
+    id;
+    name;
+    workload;
+    teacherId;
+    courseId;
 
-	static initialize(config) {
-		// Set configuration
-		this.data = config.data || [];
-		this.columns = config.columns || [];
-		this.itemsPerPage = config.itemsPerPage || 10;
+    constructor(id, name, workload, teacher, course) {
+        this.id = id;
+        this.name = name;
+        this.workload = workload;
+        this.teacherId = teacher;
+        this.courseId = course;
+    }
 
-		// Set DOM elements
-		this.tableBody = document.getElementById("tableBody");
-		this.pagination = document.getElementById("pagination");
-		this.itemsPerPageSelector = document.getElementById("itemsPerPage");
-		this.searchBox = document.getElementById("searchBox");
+    get id() {
+        return this.id;
+    }
 
-		this.filteredData = [...this.data];
+    set id(value) {
+        this.id = value;
+    }
 
-		// Add event listeners
-		if (this.itemsPerPageSelector) {
-			this.itemsPerPageSelector.addEventListener("change", this.handleItemsPerPageChange.bind(this));
-		}
-		if (this.pagination) {
-			this.pagination.addEventListener("click", this.handlePaginationClick.bind(this));
-		}
-		if (this.searchBox) {
-			this.searchBox.addEventListener("input", this.handleSearch.bind(this));
-		}
+    get name() {
+        return this.name;
+    }
 
-		this.updateTable();
-	}
+    set name(value) {
+        this.name = value;
+    }
 
-	static renderTable(page = 1) {
-		const start = (page - 1) * this.itemsPerPage;
-		const end = start + this.itemsPerPage;
+    get workload() {
+        return this.workload;
+    }
 
-		// Generate table rows dynamically based on columns
-		this.tableBody.innerHTML = this.filteredData
-			.slice(start, end)
-			.map(item => {
-				const row = this.columns.map(column => `<td>${item[column] || ''}</td>`).join("");
-				return `<tr>${row}</tr>`;
-			})
-			.join("");
-	}
+    set workload(value) {
+        this.workload = value;
+    }
 
-	static renderPagination() {
-		const totalPages = Math.ceil(this.filteredData.length / this.itemsPerPage);
-		this.pagination.innerHTML = Array.from({ length: totalPages }, (_, i) => `
+    get teacherId() {
+        return this.teacherId;
+    }
+
+    set teacherId(value) {
+        this.teacherId = value;
+    }
+
+    get courseId() {
+        return this.courseId;
+    }
+
+    set courseId(value) {
+        this.courseId = value;
+    }
+
+}
+
+class TableCreator {
+    constructor(config) {
+        // Configurable properties
+        this.data = config.data || [];
+        this.columns = config.columns || []; // Define the columns to display
+        this.itemsPerPage = config.itemsPerPage || 10;
+        this.currentPage = 1;
+
+        // DOM elements
+        this.tableBody = document.getElementById(card - body);
+        this.pagination = document.getElementById(config.paginationId);
+        this.itemsPerPageSelector = document.getElementById(config.itemsPerPageSelectorId);
+        this.searchBox = document.getElementById(config.searchBoxId);
+
+        this.filteredData = [...this.data];
+
+        // Event listeners
+        if (this.itemsPerPageSelector) {
+            this.itemsPerPageSelector.addEventListener("change", this.handleItemsPerPageChange.bind(this));
+        }
+        if (this.pagination) {
+            this.pagination.addEventListener("click", this.handlePaginationClick.bind(this));
+        }
+        if (this.searchBox) {
+            this.searchBox.addEventListener("input", this.handleSearch.bind(this));
+        }
+
+        this.updateTable();
+    }
+
+    renderTable(page = 1) {
+        const start = (page - 1) * this.itemsPerPage;
+        const end = start + this.itemsPerPage;
+
+        // Generate table rows dynamically based on columns
+        this.tableBody.innerHTML = this.filteredData
+            .slice(start, end)
+            .map(item => {
+                const row = this.columns.map(column => `<td>${item[column] || ''}</td>`).join("");
+                return `<tr>${row}</tr>`;
+            })
+            .join("");
+    }
+
+    renderPagination() {
+        const totalPages = Math.ceil(this.filteredData.length / this.itemsPerPage);
+        this.pagination.innerHTML = Array.from({length: totalPages}, (_, i) => `
             <li class="page-item ${i + 1 === this.currentPage ? "active" : ""}">
                 <button class="page-link" data-page="${i + 1}">${i + 1}</button>
             </li>
         `).join("");
-	}
+    }
 
-	static updateTable() {
-		this.renderTable(this.currentPage);
-		this.renderPagination();
-	}
+    updateTable() {
+        this.renderTable(this.currentPage);
+        this.renderPagination();
+    }
 
-	static handleItemsPerPageChange() {
-		this.itemsPerPage = parseInt(this.itemsPerPageSelector.value);
-		this.currentPage = 1;
-		this.updateTable();
-	}
+    handleItemsPerPageChange() {
+        this.itemsPerPage = parseInt(this.itemsPerPageSelector.value);
+        this.currentPage = 1;
+        this.updateTable();
+    }
 
-	static handlePaginationClick(event) {
-		if (event.target.tagName === "BUTTON") {
-			this.currentPage = parseInt(event.target.dataset.page);
-			this.updateTable();
-		}
-	}
+    handlePaginationClick(event) {
+        if (event.target.tagName === "BUTTON") {
+            this.currentPage = parseInt(event.target.dataset.page);
+            this.updateTable();
+        }
+    }
 
-	static handleSearch() {
-		const query = this.searchBox.value.toLowerCase();
-		this.filteredData = this.data.filter(item =>
-			this.columns.some(column => {
-				const value = item[column];
-				return typeof value === "string" && value.toLowerCase().includes(query);
-			})
-		);
-		this.currentPage = 1;
-		this.updateTable();
-	}
+    handleSearch() {
+        const query = this.searchBox.value.toLowerCase();
+        this.filteredData = this.data.filter(item => this.columns.some(column => {
+            const value = item[column];
+            return typeof value === "string" && value.toLowerCase().includes(query);
+        }));
+        this.currentPage = 1;
+        this.updateTable();
+    }
 }
 
-function registerUser()
-{
-	let nome = document.getElementById("input-username").value;
-	let senha = document.getElementById("input-password").value;
-	let email = "@";
-
-	let returnDiv = document.getElementById("login-message");
-
-	if (usuariosCadastrados.isCadastradoNome(nome))
-	{
-		returnDiv.textContent = "Usuario ja cadastrado.";
-		return;
-	}
-
-	// if (usuariosCadastrados.isCadastradoEmail(email)) {
-	// 	returnDiv.textContent = "Email ja utilizado por outro usuário!";
-	// 	return;
-	// }
-
-	usuariosCadastrados.novoUsuario(nome, senha, email);
+function isLoggedIn() {
+    return sessionStorage.getItem("loginSession") != null;
 }
 
-function isLoggedIn()
-{
-	return sessionStorage.getItem("loginSession") != null;
+function logout() {
+    if (isLoggedIn()) {
+        sessionStorage.removeItem("loginSession");
+    } else {
+        alert("You are not logged into any account!");
+    }
+
+    window.location = "./index.html";
 }
 
-function login()
-{
-	let nome = document.getElementById("input-username").value;
-	let senha = document.getElementById("input-password").value;
+function canLoadProtectedPage() {
+    const page = location.href.split("/").slice(-1)[0].split(".")[0];
+    if (!isLoggedIn() && page != "index") {
+        alert("You need to be logged in to access this page!");
+        window.location = "./index.html";
+        return;
+    }
 
-	let returnDiv = document.querySelector(".login-message");
-
-	console.log(nome);
-	console.log(senha);
-
-	if (!usuariosCadastrados.isCadastradoNome(nome))
-	{
-		returnDiv.textContent = "Usuário não encontrado. Favor realizar o cadastro primeiro.";
-		return;
-	}
-
-	if (!usuariosCadastrados.checkPassword(nome, senha))
-	{
-		returnDiv.textContent = "Senha incorreta favor tentar novamente.";
-		console.log(usuariosCadastrados.todosUsuarios());
-		return;
-	}
-
-	sessionStorage.setItem("loginSession", nome);
-	console.log(sessionStorage.getItem("loginSession"));
-	returnDiv.textContent = "Login realizado com Sucesso.";
-	window.location = "./loggedOverview.html";
+    if (isLoggedIn() && page == "index") {
+        window.location = "./loggedOverview.html";
+    }
 }
 
-function logout()
-{
-	if (isLoggedIn())
-	{
-		sessionStorage.removeItem("loginSession");
-	} else
-	{
-		alert("You are not logged into any account!");
-	}
+function createNavLink(name, href, parentUl) {
+    let navBarLi = document.createElement("li");
+    let navBarA = document.createElement("a");
 
-	window.location = "./index.html";
+    navBarA.setAttribute("href", href);
+    navBarA.setAttribute("title", name);
+    navBarA.innerHTML = name;
+
+    navBarLi.appendChild(navBarA);
+    parentUl.appendChild(navBarLi);
 }
 
-function canLoadProtectedPage()
-{
-	if (!isLoggedIn() && location.href.split("/").slice(-1).join("") != "index.html")
-	{
-		alert("You need to be logged in to access this page!");
-		window.location = "./index.html";
-		return;
-	}
+function showLoggedNavBar() {
+    let navBarLinks = [["Home", "./index.html"], ["Disciplinas", "./disciplinas.html"], ["Cadastro", "./cadastro.html"], ["Alunos", "./alunos.html"],];
 
-	if (isLoggedIn() && location.href.split("/").slice(-1).join("") == "index.html")
-	{
-		window.location = "./loggedOverview.html";
-	}
+    if (!isLoggedIn()) {
+        let navBarUl = document.querySelector(".nav-ul");
+        navBarUl.replaceChildren();
+        createNavLink(navBarLinks[0][0], navBarLinks[0][1], navBarUl);
+    } else {
+        let navBarUl = document.querySelector(".nav-ul");
+        navBarUl.replaceChildren();
+        navBarLinks.forEach((link) => {
+            createNavLink(link[0], link[1], navBarUl);
+        });
+    }
 }
 
-function createNavLink(name, href, parentUl)
-{
-	let navBarLi = document.createElement("li");
-	let navBarA = document.createElement("a");
-
-	navBarA.setAttribute("href", href);
-	navBarA.setAttribute("title", name);
-	navBarA.innerHTML = name;
-
-	navBarLi.appendChild(navBarA);
-	parentUl.appendChild(navBarLi);
+function saveToLocalStorage(name, content) {
+    localStorage.setItem(name, JSON.stringify(content));
 }
 
-function showLoggedNavBar()
-{
-	let navBarLinks = [["Home", "./index.html"], ["Disciplinas", "./disciplinas.html"], ["Cadastro", "./cadastro.html"], ["Alunos", "./alunos.html"],];
-
-	if (!isLoggedIn())
-	{
-		let navBarUl = document.querySelector(".nav-ul");
-		navBarUl.replaceChildren();
-		createNavLink(navBarLinks[0][0], navBarLinks[0][1], navBarUl);
-	} else
-	{
-		let navBarUl = document.querySelector(".nav-ul");
-		navBarUl.replaceChildren();
-		navBarLinks.forEach((link) =>
-		{
-			createNavLink(link[0], link[1], navBarUl);
-		});
-	}
+function loadFromLocalStorage(name) {
+    return JSON.parse(localStorage.getItem(name))
 }
 
-function saveToLocalStorage(name, content)
-{
-	localStorage.setItem(name, JSON.stringify(content));
+function headerUserDisplay() {
+    if (isLoggedIn()) {
+        const name = document.getElementById("header-user-name");
+        const type = document.getElementById("header-user-type");
+        const img = document.getElementById("header-user-img");
+        const dropdown = document.getElementById("header-user-dropdown");
+
+        let user = MemoryStorage.getSessionUser();
+
+        name.textContent = capitalizeFirstLetter(user.name);
+        type.textContent = capitalizeFirstLetter(user.type);
+        //img.src = user.img;
+
+        //<li><a className="dropdown-item" href="#">Sign out</a></li>
+    }
 }
 
-function loadFromLocalStorage(name)
-{
-	return JSON.parse(localStorage.getItem(name))
+function pageDisciplinas() {
+    if (document.getElementById("tableDisplay")) {
+        TableCreator.initialize(MemoryStorage.disciplinas);
+
+        document.getElementById("cadastrar-disciplina").addEventListener("click", () => {
+            const form = document.getElementById("form-disciplinas");
+            let inputs = [...form.getElementsByTagName("input"), ...form.getElementsByTagName("select")];
+            inputs = inputs.map(input => input.value);
+            MemoryStorage.disciplinas = new Disciplinas();
+        })
+    }
 }
 
-function headerUserDisplay()
-{
+function pageAlunos() {
+    if (document.getElementById("tableDisplay")) {
+        MemoryStorage.usuarios.forEach(usuario => {
+
+        })
+    }
+
+    document.getElementById("cadastrar-aluno").addEventListener("click", () => {
+        const username = checkInput("user-aluno");
+        const name = checkInput("nome-aluno");
+        const matricula = checkInput("matricula-aluno");
+
+        const email = checkInput("email-aluno");
+        const curso = checkInput("curso-aluno");
+
+        const aluno = new Student(username, name, matricula);
+
+        MemoryStorage.usuarios = aluno;
+
+        aluno.email = email;
+        aluno.curso = curso;
+
+        console.log(MemoryStorage.usuarios);
+
+
+    })
+}
+
+function pageProfessores() {
 
 }
 
-function pageDisciplinas()
-{
-	if (document.getElementById("tableDisplay"))
-	{
-		TableCreator.initialize(MemoryStorage.disciplinas);
-
-		document.getElementById("cadastrar-disciplina").addEventListener("click", () =>
-		{
-			const form = document.getElementById("form-disciplinas");
-			let inputs = [...form.getElementsByTagName("input"),...form.getElementsByTagName("select")];
-			inputs = inputs.map(input => input.value);
-			MemoryStorage.disciplinas = new Disciplinas();
-		})
-	}
-}
-
-function pageAlunos()
-{
-	if (document.getElementById("tableDisplay"))
-	{
-		const tableConfig = {
-			data: MemoryStorage.usuarios,
-			columns: ["id", "name"], // Specify which columns to display
-			itemsPerPage: 5
-		};
-
-		TableCreator.initialize(tableConfig);
-	}
-
-	document.getElementById("cadastrar-aluno").addEventListener("click", () =>{
-		const username = checkInput("user-aluno");
-		const name = checkInput("nome-aluno");
-		const matricula = checkInput("matricula-aluno");
-
-		const email = checkInput("email-aluno");
-		const curso = checkInput("curso-aluno");
-
-		const aluno = new Student(username,name,matricula);
-
-		MemoryStorage.usuarios = aluno;
-
-		aluno.email = email;
-		aluno.curso = curso;
-
-		console.log(MemoryStorage.usuarios);
-
-
-	})
-}
-
-function pageProfessores()
-{
+function pageCursos() {
 
 }
 
-function pageCursos()
-{
+function pageIndex() {
+    document.getElementById("login").addEventListener("click", () => {
+
+        sessionStorage.removeItem("loginSession");
+
+        let nome = document.getElementById("username").value;
+        let senha = document.getElementById("password").value;
+        let returnDiv = document.getElementById("loginMessage");
+
+        const user = MemoryStorage.usuarios.find(usuario => usuario.username == nome);
+
+        returnDiv.setAttribute("class", "mt-3 mb-0");
+
+        if (!user) {
+            returnDiv.classList.add("alert");
+            returnDiv.classList.add("alert-warning");
+            returnDiv.textContent = "Usuário não encontrado. Favor realizar o cadastro primeiro.";
+            return;
+        }
+
+        hashPassword(senha).then(hash => {
+            if (!user.password) {
+                user.password = hash;
+            } else if (user.password != hash) {
+                returnDiv.classList.add("alert");
+                returnDiv.classList.add("alert-danger");
+                returnDiv.textContent = "Senha incorreta favor tentar novamente.";
+                return;
+            }
+
+            sessionStorage.setItem("loginSession", user.id);
+            console.log(sessionStorage.getItem("loginSession"));
+
+            returnDiv.classList.add("alert");
+            returnDiv.classList.add("alert-success");
+            returnDiv.textContent = "Login realizado com Sucesso.";
+            window.location = "./dashboard.html";
+        });
+    });
+}
+
+function pageAdmin() {
+    document.getElementById("cadastrar-usuario").addEventListener("click", () => {
+        const id = MemoryStorage.getId();
+        const username = checkInput("user");
+        const password = checkInput("password");
+        const access = checkInput("access");
+        const name = checkInput("name");
+        const matricula = MemoryStorage.getMatricula();
+
+        if (!MemoryStorage.canHaveUsername(username)) {
+            alert("Nome de Usuário já foi cadastrado!")
+            return;
+        }
+
+        let user;
+
+        hashPassword(password).then(hash => {
+            switch (access) {
+                case "admin":
+                    user = new User(
+                        {id, username, hash, email: undefined, access, name});
+                    break;
+                case "teacher":
+                    user = new Teacher({
+                        id, username, hash, email: undefined, name, departamento: undefined, disciplinas: undefined
+                    });
+                    break;
+                case "student":
+                    user = new Student({
+                        id,
+                        username,
+                        hash,
+                        email: undefined,
+                        name,
+                        matricula,
+                        curso: undefined,
+                        periodo: undefined,
+                        disciplinas: undefined
+                    });
+                    break;
+                default:
+                    break;
+            }
+
+            MemoryStorage.usuarios = user;
+        });
+    })
+}
+
+function pageDashboard() {
 
 }
 
-function pageDashboard()
-{
-
+async function hashPassword(password) {
+    const encoder = new TextEncoder();
+    const data = encoder.encode(password);
+    const hashBuffer = await crypto.subtle.digest('SHA-256', data);
+    const hashArray = Array.from(new Uint8Array(hashBuffer));
+    return hashArray.map(byte => byte.toString(16).padStart(2, '0')).join('');
 }
 
-async function hashPasswordWithSalt(password, salt) {
-	const encoder = new TextEncoder();
-	const saltedPassword = password + salt; // Combine password and salt
-	const data = encoder.encode(saltedPassword);
-	const hashBuffer = await crypto.subtle.digest('SHA-256', data);
-	const hashArray = Array.from(new Uint8Array(hashBuffer));
-	return hashArray.map(byte => byte.toString(16).padStart(2, '0')).join('');
+function checkInput(inputName) {
+    let input = document.getElementById(inputName);
+    let value = input.value;
+
+    if (!value) {
+        alert("Por favor preencha o campo!");
+        return;
+    }
+
+    return value;
 }
 
-// Generate a random salt
-function generateSalt(length = 16) {
-	const charset = 'ABCDEFGHIJKLMNOPQRSTUVWXYZabcdefghijklmnopqrstuvwxyz0123456789';
-	let salt = '';
-	for (let i = 0; i < length; i++) {
-		const randomIndex = Math.floor(Math.random() * charset.length);
-		salt += charset[randomIndex];
-	}
-	return salt;
-}
-
-function checkInput(inputName,text)
-{
-	let input = document.getElementById(inputName);
-	let value = input.value;
-
-	if(!value)
-	{
-		alert("Por favor preencha o campo!");
-		return;
-	}
-
-	return value;
+function capitalizeFirstLetter(val) {
+    return String(val).charAt(0).toUpperCase() + String(val).slice(1);
 }
