@@ -24,7 +24,7 @@
 
         main {
             width: 100%;
-            height: 100vh;
+            height: 100%;
             background-color: rgba(0, 52, 89, 0.5);
         }
     </style>
@@ -36,7 +36,7 @@
         <div class="container">
             <div class="d-flex flex-wrap align-items-center justify-content-center">
                 <!-- Logo -->
-                <a class="d-flex align-items-center mb-2 mb-lg-0 link-body-emphasis text-decoration-none" href="">
+                <a class="d-flex align-items-center mb-2 mb-lg-0 link-body-emphasis text-decoration-none" href="./index.html">
                     <img alt="Logo" class="logo me-3" src="./img/logo.png">
                 </a>
 
@@ -61,8 +61,8 @@
 			            </span>
                     </div>
                     <a aria-expanded="false"
-                       class="d-block text-decoration-none dropdown-toggle link-white">
-                        <img alt="mdo" class="rounded-circle" height="32" src="./img/perfil.webp" width="32" id="header-user-img">
+                       class="d-block text-decoration-none dropdown-toggle link-white" id="header-user-action">
+                        <img alt="mdo" class="rounded-circle" height="32" src="./img/perfil.webp" width="32">
                     </a>
                     <!-- Profile DropDown -->
                     <ul class="dropdown-menu text-small" id="header-user-dropdown">
@@ -74,12 +74,12 @@
 
     <!-- Main Content -->
     <div class="container mt-4">
-        <!-- Formulário Cadastro de Disciplinas -->
+        <!-- Formulário Cadastro de Alunos -->
         <div class="card mb-4">
             <div class="card-header bg-primary text-white">Adicionar Usuário</div>
             <div class="card-body">
                 <div class="card-body">
-                    <div id="form-disciplinas">
+                    <div id="form-alunos">
                         <div class="mb-3">
                             <label class="form-label" for="user">Usuário: </label>
                             <input class="form-control" id="user" type="text" value="Arthur">
@@ -103,6 +103,65 @@
                         </div>
                         <div>
                             <button class="btn btn-primary" id="cadastrar-usuario" type="submit">Cadastrar</button>
+                        </div>
+                    </div>
+                </div>
+            </div>
+        </div>
+
+        <!-- Formulário Cadastro de Disciplina -->
+        <div class="card mb-4">
+            <div class="card-header bg-primary text-white">Adicionar Disciplina</div>
+            <div class="card-body">
+                <div class="card-body">
+                    <div id="form-disciplinas">
+                        <div class="mb-3">
+                            <label class="form-label" for="disciplina-name">Nome: </label>
+                            <input class="form-control" id="disciplina-name" type="text" value="Arthur">
+                        </div>
+                        <div class="mb-3">
+                            <label class="form-label" for="disciplina-workload">Carga Horária: </label>
+                            <input class="form-control" id="disciplina-workload" type="text" value="Croce">
+                        </div>
+                        <div class="mb-3">
+                            <label class="form-label" for="disciplina-teacher">Professor: </label>
+                            <datalist class="form-select" id="disciplina-teacher">
+                                <option value="">Selecione</option>
+                            </datalist>
+                        </div>
+                        <div class="mb-3">
+                            <label class="form-label" for="disciplina-curso">Curso: </label>
+                            <datalist class="form-select" id="disciplina-curso">
+                                <option value="">Selecione</option>
+                            </datalist>
+                        </div>
+
+                        <div>
+                            <button class="btn btn-primary" id="cadastrar-disciplina" type="submit">Cadastrar</button>
+                        </div>
+                    </div>
+                </div>
+            </div>
+        </div>
+
+        <!-- Formulário Cadastro de Curso -->
+        <div class="card mb-4">
+            <div class="card-header bg-primary text-white">Adicionar Curso</div>
+            <div class="card-body">
+                <div class="card-body">
+                    <div id="form-curso">
+                        <div class="mb-3">
+                            <label class="form-label" for="curso-name">Nome: </label>
+                            <input class="form-control" id="curso-name" type="text" value="Arthur">
+                        </div>
+                        <div class="mb-3">
+                            <label class="form-label" for="curso-description">Descrição: </label>
+                            <textarea class="form-control" id="curso-description" type="">
+                            </textarea>
+                        </div>
+
+                        <div>
+                            <button class="btn btn-primary" id="cadastrar-curso" type="submit">Cadastrar</button>
                         </div>
                     </div>
                 </div>
