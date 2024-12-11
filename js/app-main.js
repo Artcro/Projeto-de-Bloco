@@ -45,6 +45,37 @@ class MemoryStorage
 	static #disciplinas = [];
 	static #cursos = [];
 
+
+	static removeUser(id)
+	{
+		if (this.#usuarios.length < 1)
+		{
+			this.loadUsers();
+		}
+		this.#usuarios.splice(id, 1);
+		saveToLocalStorage(dbUsers, this.#usuarios);
+	}
+
+	static removeDisciplina(id)
+	{
+		if (this.#disciplinas.length < 1)
+		{
+			this.loadDisciplinas();
+		}
+		this.#disciplinas.splice(id, 1);
+		saveToLocalStorage(dbUsers, this.#disciplinas);
+	}
+
+	static removeCurso(id)
+	{
+		if (this.#cursos.length < 1)
+		{
+			this.loadCursos();
+		}
+		this.#cursos.splice(id, 1);
+		saveToLocalStorage(dbUsers, this.#cursos);
+	}
+
 	static get usuarios()
 	{
 		if (this.#usuarios.length < 1)
@@ -180,6 +211,7 @@ class MemoryStorage
 		}
 		return 1000;
 	}
+
 	static getIdCurso()
 	{
 		const loaded = loadFromLocalStorage(dbCursos);
@@ -401,7 +433,7 @@ class Disciplina
 	teacherId;
 	courseId;
 
-	constructor(id, name, workload, teacher, course)
+	constructor({id, name, workload, teacher, course})
 	{
 		this.id = id;
 		this.name = name;
@@ -469,6 +501,7 @@ class Curso
 	description
 	disciplinas = [];
 	alunos = []
+
 	constructor({id, name, description, disciplinas, alunos})
 	{
 		this.id = id;
@@ -477,6 +510,7 @@ class Curso
 		this.disciplinas = disciplinas;
 		this.alunos = alunos;
 	}
+
 	get id()
 	{
 		return this.id;
@@ -486,6 +520,7 @@ class Curso
 	{
 		this.id = value;
 	}
+
 	get name()
 	{
 		return this.name;
@@ -495,6 +530,7 @@ class Curso
 	{
 		this.name = value;
 	}
+
 	get description()
 	{
 		return this.description;
@@ -527,10 +563,10 @@ class TableCreator
 		this.currentPage = 1;
 
 		// DOM elements
-		this.tableBody = document.getElementById(card - body);
-		this.pagination = document.getElementById(config.paginationId);
-		this.itemsPerPageSelector = document.getElementById(config.itemsPerPageSelectorId);
-		this.searchBox = document.getElementById(config.searchBoxId);
+		this.tableBody = document.getElementById("tableBody");
+		this.pagination = document.getElementById("pagination");
+		this.itemsPerPageSelector = document.getElementById("itemsPerPage");
+		this.searchBox = document.getElementById("searchBox");
 
 		this.filteredData = [...this.data];
 
@@ -553,6 +589,7 @@ class TableCreator
 
 	renderTable(page = 1)
 	{
+		console.log("here");
 		const start = (page - 1) * this.itemsPerPage;
 		const end = start + this.itemsPerPage;
 
@@ -561,7 +598,12 @@ class TableCreator
 			.slice(start, end)
 			.map(item =>
 			{
-				const row = this.columns.map(column => `<td>${item[column] || ''}</td>`).join("");
+				let row = this.columns.map(column => `<td>${item[column] || ''}</td>`).join("");
+
+				row += `
+					<td><button class="btn btn-danger" onclick="deleteElement(this)">Delete</button></td> 
+				`
+
 				return `<tr>${row}</tr>`;
 			})
 			.join("");
@@ -640,10 +682,10 @@ function canLoadProtectedPage()
 		return;
 	}
 
-	// if (isLoggedIn() && page == "index")
-	// {
-	// 	window.location = "./dashboard.html";
-	// }
+	if (isLoggedIn() && page == "index")
+	{
+		window.location = "./dashboard.html";
+	}
 }
 
 function showLoggedNavBar()
@@ -749,18 +791,21 @@ function capitalizeFirstLetter(val)
 
 function pageDisciplinas()
 {
-	if (document.getElementById("tableDisplay"))
-	{
-		TableCreator.initialize(MemoryStorage.disciplinas);
 
-		document.getElementById("cadastrar-disciplina").addEventListener("click", () =>
-		{
-			const form = document.getElementById("form-disciplinas");
-			let inputs = [...form.getElementsByTagName("input"), ...form.getElementsByTagName("select")];
-			inputs = inputs.map(input => input.value);
-			MemoryStorage.disciplinas = new Disciplina();
-		})
-	}
+	tableSectionElement.push(new TableCreator(MemoryStorage.disciplinas));
+
+	document.getElementById("cadastrar-disciplina").addEventListener("click", () =>
+	{
+		const id = MemoryStorage.getIdDisciplina();
+		const name = checkInput("nome-disciplina");
+		const workload = checkInput("carga-disciplina");
+		const teacher = document.getElementById("professor-disciplina");
+		const curso = document.getElementById("curso-disciplina");
+
+
+		MemoryStorage.disciplinas = new Disciplina({id, name, workload, teacher: teacher.value , course: curso.value});
+		tableSectionElement[0].updateTable();
+	})
 }
 
 function pageAlunos()
@@ -854,6 +899,7 @@ function pageIndex()
 
 function pageAdmin()
 {
+	// Casastro de usuário
 	document.getElementById("cadastrar-usuario").addEventListener("click", () =>
 	{
 		const id = MemoryStorage.getId();
@@ -905,6 +951,10 @@ function pageAdmin()
 		});
 	})
 
+
+	// Casastro de disciplina
+	loadDisciplinaInputs();
+
 	document.getElementById("cadastrar-disciplina").addEventListener("click", () =>
 	{
 		const id = MemoryStorage.getIdDisciplina();
@@ -913,50 +963,37 @@ function pageAdmin()
 		const teacher = document.getElementById("disciplina-teacher");
 		const curso = document.getElementById("disciplina-curso");
 
-		MemoryStorage.usuarios.map(user => user.access == "teacher").forEach(t =>
-		{
-			teacher.innerHTML += `
-				<option value="${t.id}">${t.name}</option>
-			`
-		})
 
-		MemoryStorage.cursos.forEach(curso =>
-		{
-			teacher.innerHTML += `
-				<option value="${curso.id}">${curso.name}</option>
-			`
-		})
-
-		MemoryStorage.disciplinas = new Disciplina(id, name, workload, teacher.value, curso.value);
-	})
-
-	document.getElementById("cadastrar-curso").addEventListener("click", () =>
-	{
-		const id = MemoryStorage.getIdCurso();
-		const name = checkInput("disciplina-name");
-		const workload = checkInput("disciplina-workload");
-		const teacher = document.getElementById("disciplina-teacher");
-		const curso = document.getElementById("disciplina-curso");
-
-		MemoryStorage.usuarios.map(user => user.access == "teacher").forEach(t =>
-		{
-			teacher.innerHTML += `
-				<option value="${t.id}">${t.name}</option>
-			`
-		})
-
-		MemoryStorage.cursos.forEach(curso =>
-		{
-			teacher.innerHTML += `
-				<option value="${curso.id}">${curso.name}</option>
-			`
-		})
-
-		MemoryStorage.disciplinas = new Disciplina(id, name, workload, teacher.value, curso.value);
+		MemoryStorage.disciplinas = new Disciplina({id, name, workload, teacher: teacher.value , course: curso.value});
 	})
 }
 
 function pageDashboard()
+{
+
+}
+
+function loadDisciplinaInputs()
+{
+	const teacher = document.getElementById("disciplina-teacher");
+	const curso = document.getElementById("disciplina-curso");
+
+	MemoryStorage.usuarios.filter(user => user.access == "teacher").forEach(t =>
+	{
+		teacher.innerHTML += `
+			<option value="${t.id}">${t.name}</option>
+		`
+	})
+
+	MemoryStorage.cursos.forEach(c =>
+	{
+		curso.innerHTML += `
+				<option value="${c.id}">${c.name}</option>
+			`
+	})
+}
+
+function deleteElement(tableButtonElement)
 {
 
 }
