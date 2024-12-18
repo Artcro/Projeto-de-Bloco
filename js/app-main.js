@@ -1,6 +1,7 @@
 canLoadProtectedPage();
 window.addEventListener("load", () =>
 {
+	createBasicDatabase();
 	showLoggedNavBar();
 	headerUserDisplay();
 	const page = location.href.split("/").slice(-1)[0].split(".")[0];
@@ -44,37 +45,6 @@ class MemoryStorage
 	static #usuarios = [];
 	static #disciplinas = [];
 	static #cursos = [];
-
-
-	static removeUser(id)
-	{
-		if (this.#usuarios.length < 1)
-		{
-			this.loadUsers();
-		}
-		this.#usuarios.splice(id, 1);
-		saveToLocalStorage(dbUsers, this.#usuarios);
-	}
-
-	static removeDisciplina(id)
-	{
-		if (this.#disciplinas.length < 1)
-		{
-			this.loadDisciplinas();
-		}
-		this.#disciplinas.splice(id, 1);
-		saveToLocalStorage(dbUsers, this.#disciplinas);
-	}
-
-	static removeCurso(id)
-	{
-		if (this.#cursos.length < 1)
-		{
-			this.loadCursos();
-		}
-		this.#cursos.splice(id, 1);
-		saveToLocalStorage(dbUsers, this.#cursos);
-	}
 
 	static get usuarios()
 	{
@@ -122,6 +92,43 @@ class MemoryStorage
 		this.loadCursos();
 		this.#cursos.push(value);
 		saveToLocalStorage(dbCursos, this.#cursos)
+	}
+
+	static removeUser(id)
+	{
+		if (this.#usuarios.length < 1)
+		{
+			this.loadUsers();
+		}
+		this.#usuarios.splice(id, 1);
+		saveToLocalStorage(dbUsers, this.#usuarios);
+	}
+
+	static removeDisciplina(id)
+	{
+		if (this.#disciplinas.length < 1)
+		{
+			this.loadDisciplinas();
+		}
+		this.#disciplinas.splice(id, 1);
+		saveToLocalStorage(dbUsers, this.#disciplinas);
+	}
+
+	static removeCurso(id)
+	{
+		if (this.#cursos.length < 1)
+		{
+			this.loadCursos();
+		}
+		this.#cursos.splice(id, 1);
+		saveToLocalStorage(dbUsers, this.#cursos);
+	}
+
+	static addUser(value)
+	{
+		this.loadUsers();
+		this.#usuarios.push(value);
+		saveToLocalStorage(dbUsers, this.#usuarios);
 	}
 
 	static load(e)
@@ -552,108 +559,6 @@ class Curso
 	}
 }
 
-class TableCreator
-{
-	constructor(config)
-	{
-		// Configurable properties
-		this.data = config.data || [];
-		this.columns = config.columns || []; // Define the columns to display
-		this.itemsPerPage = config.itemsPerPage || 10;
-		this.currentPage = 1;
-
-		// DOM elements
-		this.tableBody = document.getElementById("tableBody");
-		this.pagination = document.getElementById("pagination");
-		this.itemsPerPageSelector = document.getElementById("itemsPerPage");
-		this.searchBox = document.getElementById("searchBox");
-
-		this.filteredData = [...this.data];
-
-		// Event listeners
-		if (this.itemsPerPageSelector)
-		{
-			this.itemsPerPageSelector.addEventListener("change", this.handleItemsPerPageChange.bind(this));
-		}
-		if (this.pagination)
-		{
-			this.pagination.addEventListener("click", this.handlePaginationClick.bind(this));
-		}
-		if (this.searchBox)
-		{
-			this.searchBox.addEventListener("input", this.handleSearch.bind(this));
-		}
-
-		this.updateTable();
-	}
-
-	renderTable(page = 1)
-	{
-		console.log("here");
-		const start = (page - 1) * this.itemsPerPage;
-		const end = start + this.itemsPerPage;
-
-		// Generate table rows dynamically based on columns
-		this.tableBody.innerHTML = this.filteredData
-			.slice(start, end)
-			.map(item =>
-			{
-				let row = this.columns.map(column => `<td>${item[column] || ''}</td>`).join("");
-
-				row += `
-					<td><button class="btn btn-danger" onclick="deleteElement(this)">Delete</button></td> 
-				`
-
-				return `<tr>${row}</tr>`;
-			})
-			.join("");
-	}
-
-	renderPagination()
-	{
-		const totalPages = Math.ceil(this.filteredData.length / this.itemsPerPage);
-		this.pagination.innerHTML = Array.from({length: totalPages}, (_, i) => `
-            <li class="page-item ${i + 1 === this.currentPage ? "active" : ""}">
-                <button class="page-link" data-page="${i + 1}">${i + 1}</button>
-            </li>
-        `).join("");
-	}
-
-	updateTable()
-	{
-		this.renderTable(this.currentPage);
-		this.renderPagination();
-	}
-
-	handleItemsPerPageChange()
-	{
-		this.itemsPerPage = parseInt(this.itemsPerPageSelector.value);
-		this.currentPage = 1;
-		this.updateTable();
-	}
-
-	handlePaginationClick(event)
-	{
-		if (event.target.tagName === "BUTTON")
-		{
-			this.currentPage = parseInt(event.target.dataset.page);
-			this.updateTable();
-		}
-	}
-
-	handleSearch()
-	{
-		const query = this.searchBox.value.toLowerCase();
-		this.filteredData = this.data.filter(item => this.columns.some(column =>
-		{
-			const value = item[column];
-			return typeof value === "string" && value.toLowerCase().includes(query);
-		}));
-		this.currentPage = 1;
-		this.updateTable();
-	}
-}
-
 function isLoggedIn()
 {
 	return sessionStorage.getItem("loginSession") != null;
@@ -700,7 +605,8 @@ function showLoggedNavBar()
 		const accessLinks = {
 			student: [
 				{text: "Painel", href: "./dashboard.html"},
-				{text: "Perfil", href: "./index.html"},
+				{text: "Usuarios", href: "./alunos.html"},
+				{text: "Cursos", href: "./cursos.html"},
 			],
 			teacher: [
 				{text: "Disciplinas", href: "./disciplinas.html"},
@@ -791,53 +697,86 @@ function capitalizeFirstLetter(val)
 
 function pageDisciplinas()
 {
-
-	tableSectionElement.push(new TableCreator(MemoryStorage.disciplinas));
+	let data = MemoryStorage.disciplinas;
+	renderTable(data, "tableBody", "tableHead","disciplinas", "OnRemoveDisciplina");
 
 	document.getElementById("cadastrar-disciplina").addEventListener("click", () =>
 	{
 		const id = MemoryStorage.getIdDisciplina();
 		const name = checkInput("nome-disciplina");
-		const workload = checkInput("carga-disciplina");
+		const workload = checkInput("cargaHoraria");
 		const teacher = document.getElementById("professor-disciplina");
 		const curso = document.getElementById("curso-disciplina");
 
 
-		MemoryStorage.disciplinas = new Disciplina({id, name, workload, teacher: teacher.value , course: curso.value});
-		tableSectionElement[0].updateTable();
+		MemoryStorage.disciplinas = new Disciplina({id, name, workload, teacher: teacher.value, course: curso.value});
+
+		let data = MemoryStorage.disciplinas;
+		renderTable(data, "tableBody", "tableHead","disciplinas", "OnRemoveDisciplina");
 	})
 }
 
 function pageAlunos()
 {
-	if (document.getElementById("tableDisplay"))
+	let data = MemoryStorage.usuarios;
+	renderTable(data, "tableBody", "tableHead","users", "OnRemoveUser");
+	
+	document.getElementById("cadastrar-usuario").addEventListener("click", () =>
 	{
-		MemoryStorage.usuarios.forEach(usuario =>
+		const id = MemoryStorage.getId();
+		const username = checkInput("user");
+		const password = checkInput("password");
+		const access = checkInput("access");
+		const name = checkInput("name");
+		const matricula = MemoryStorage.getMatricula();
+
+		if (!MemoryStorage.canHaveUsername(username))
 		{
+			alert("Nome de Usuário já foi cadastrado!")
+			return;
+		}
 
-		})
-	}
+		let user;
 
-	document.getElementById("cadastrar-aluno").addEventListener("click", () =>
-	{
-		const username = checkInput("user-aluno");
-		const name = checkInput("nome-aluno");
-		const matricula = checkInput("matricula-aluno");
+		hashPassword(password).then(hash =>
+		{
+			switch (access)
+			{
+				case "admin":
+					user = new User(
+						{id, username, hash, email: undefined, access: "admin", name});
+					break;
+				case "teacher":
+					user = new Teacher({
+						id, username, hash, email: undefined, name, departamento: undefined, disciplinas: undefined
+					});
+					break;
+				case "student":
+					user = new Student({
+						id,
+						username,
+						hash,
+						email: undefined,
+						name,
+						matricula,
+						curso: undefined,
+						periodo: undefined,
+						disciplinas: undefined
+					});
+					break;
+				default:
+					break;
+			}
 
-		const email = checkInput("email-aluno");
-		const curso = checkInput("curso-aluno");
+			MemoryStorage.usuarios = user;
+		});
 
-		const aluno = new Student(username, name, matricula);
-
-		MemoryStorage.usuarios = aluno;
-
-		aluno.email = email;
-		aluno.curso = curso;
-
-		console.log(MemoryStorage.usuarios);
-
-
+		let data = MemoryStorage.usuarios;
+		renderTable(data, "tableBody", "tableHead","users", "OnRemoveUser");
 	})
+	
+
+	
 }
 
 function pageProfessores()
@@ -964,7 +903,7 @@ function pageAdmin()
 		const curso = document.getElementById("disciplina-curso");
 
 
-		MemoryStorage.disciplinas = new Disciplina({id, name, workload, teacher: teacher.value , course: curso.value});
+		MemoryStorage.disciplinas = new Disciplina({id, name, workload, teacher: teacher.value, course: curso.value});
 	})
 }
 
@@ -997,3 +936,89 @@ function deleteElement(tableButtonElement)
 {
 
 }
+
+function createBasicDatabase()
+{
+	if (MemoryStorage.canHaveUsername("Arthur"))
+	{
+		hashPassword("Croce").then(hash =>
+		{
+
+			const user = new User({
+				id: 0,
+				username: "Arthur",
+				password: hash,
+				email: undefined,
+				access: "admin",
+				name: "Arthur"
+			});
+
+			MemoryStorage.addUser(user);
+		})
+	}
+}
+
+function renderTable(data, tableBodyId, tableHeadId, tableType, onRemove)
+{
+	if (!data) return;
+	const tableBody = document.getElementById(tableBodyId);
+	const tableHead = document.getElementById(tableHeadId);
+
+	// Get the object with the most properties
+	const largestObject = data.reduce((largest, current) =>
+		Object.keys(current).length > Object.keys(largest).length ? current : largest, {});
+
+	// Render the table headers dynamically
+	function renderHeaders() {
+		const headers = Object.keys(largestObject);
+		tableHead.innerHTML = `
+            <tr>
+                ${headers.map(header => `<th>${header.charAt(0).toUpperCase() + header.slice(1)}</th>`).join("")}
+                <th>Actions</th>
+            </tr>
+        `;
+	}
+
+	// Render the table rows dynamically
+	function renderRows() {
+		tableBody.innerHTML = data.map(item => {
+			// Fill missing keys with empty strings
+			const rowValues = Object.keys(largestObject).map(key => item[key] || "");
+			return `
+                <tr>
+                    ${rowValues.map(value => `<td>${value}</td>`).join("")}
+                    <td>
+                        <button class="btn btn-danger btn-sm" onclick="(${onRemove})('${item.id}', '${tableType}')">Remove</button>
+                    </td>
+                </tr>
+            `;
+		}).join("");
+	}
+
+	// Initial render
+	renderHeaders();
+	renderRows();
+}
+
+function OnRemoveUser(id, type)
+{
+	MemoryStorage.removeUser(id);
+	let data = MemoryStorage.usuarios;
+	renderTable(data, "tableBody", "tableHead","users", OnRemoveUser);
+}
+
+function OnRemoveDisciplina(id, type)
+{
+	MemoryStorage.removeUser(id);
+	let data = MemoryStorage.usuarios;
+	renderTable(data, "tableBody", "tableHead","users", OnRemoveUser);
+}
+
+function OnRemoveCurso(id, type)
+{
+	MemoryStorage.removeUser(id);
+	let data = MemoryStorage.usuarios;
+	renderTable(data, "tableBody", "tableHead","users", OnRemoveUser);
+}
+
+

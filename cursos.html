@@ -2,9 +2,9 @@
 <html lang="pt-br">
 <head>
     <meta charset="UTF-8">
-    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <meta content="width=device-width, initial-scale=1.0" name="viewport">
     <title>SIGA</title>
-    <link rel="shortcut icon" href="./img/img.png">
+    <link href="./img/img.png" rel="shortcut icon">
     <link href="https://cdn.jsdelivr.net/npm/bootstrap@5.3.0/dist/css/bootstrap.min.css" rel="stylesheet">
     <link href="https://cdn.jsdelivr.net/npm/bootstrap-icons/font/bootstrap-icons.css" rel="stylesheet">
     <script src="js/app-main.js"></script>
@@ -36,8 +36,8 @@
         <div class="container">
             <div class="d-flex flex-wrap align-items-center justify-content-center">
                 <!-- Logo -->
-                <a href="" class="d-flex align-items-center mb-2 mb-lg-0 link-body-emphasis text-decoration-none">
-                    <img src="./img/logo.png" alt="Logo" class="logo me-3">
+                <a class="d-flex align-items-center mb-2 mb-lg-0 link-body-emphasis text-decoration-none" href="./index.html">
+                    <img alt="Logo" class="logo me-3" src="./img/logo.png">
                 </a>
 
                 <!-- Nav -->
@@ -60,12 +60,12 @@
                             <span id="header-user-type">Guest</span>
 			            </span>
                     </div>
-                    <a class="d-block text-decoration-none dropdown-toggle link-white"
-                       aria-expanded="false">
-                        <img src="./img/perfil.webp" alt="mdo" width="32" height="32" class="rounded-circle">
+                    <a aria-expanded="false"
+                       class="d-block text-decoration-none dropdown-toggle link-white" id="header-user-action">
+                        <img alt="mdo" class="rounded-circle" height="32" src="./img/perfil.webp" width="32">
                     </a>
                     <!-- Profile DropDown -->
-                    <ul class="dropdown-menu text-small">
+                    <ul class="dropdown-menu text-small" id="header-user-dropdown">
                     </ul>
                 </div>
             </div>
@@ -74,50 +74,39 @@
 
     <!-- Main Content -->
     <div class="container mt-4">
-        <!-- Formulário Cadastro de Disciplinas -->
         <div class="card mb-4">
-            <div class="card-header bg-primary text-white">Cadastrar Disciplinas</div>
+            <div class="card-header bg-primary text-white">Adicionar Usuário</div>
             <div class="card-body">
                 <div class="card-body">
-                    <div id="form-disciplinas">
+                    <div id="form-alunos">
                         <div class="mb-3">
-                            <label for="nome-disciplina" class="form-label">Nome da Disciplina: </label>
-                            <input type="text" class="form-control" id="nome-disciplina"
-                                   placeholder="Nome da Disciplina">
+                            <label class="form-label" for="user">Usuário: </label>
+                            <input class="form-control" id="user" type="text" value="Arthur">
                         </div>
                         <div class="mb-3">
-                            <label for="codigo-disciplina" class="form-label">Código da Disciplina: </label>
-                            <input type="text" class="form-control" id="codigo-disciplina"
-                                   placeholder="Código da Disciplina">
+                            <label class="form-label" for="password">Senha: </label>
+                            <input class="form-control" id="password" type="text" value="Croce">
                         </div>
                         <div class="mb-3">
-                            <label for="cargaHoraria" class="form-label">Carga Horária: </label>
-                            <input type="number" class="form-control" id="cargaHoraria" placeholder="0">
-                        </div>
-                        <div class="mb-3">
-                            <label for="professor-disciplina" class="form-label">Professor: </label>
-                            <select class="form-control" id="professor-disciplina">
-                                <option value="Selecione">Selecione</option>
-                                <option value="Arthur">Arthur</option>
+                            <label class="form-label" for="access">Acesso: </label>
+                            <select class="form-select" id="access">
+                                <option value="student">Aluno</option>
+                                <option value="teacher">Professor</option>
+                                <option value="admin">Admin</option>
                             </select>
                         </div>
+
                         <div class="mb-3">
-                            <label for="curso-disciplina" class="form-label">Curso: </label>
-                            <select class="form-control" id="curso-disciplina">
-                                <option value="Selecione">Selecione</option>
-                                <option value="Engenharia">Engenharia</option>
-                            </select>
+                            <label class="form-label" for="name">Nome: </label>
+                            <input class="form-control" id="name" type="text" value="Arthur">
                         </div>
                         <div>
-                            <button type="submit" class="btn btn-primary" id="cadastrar-disciplina">Cadastrar</button>
+                            <button class="btn btn-primary" id="cadastrar-usuario" type="submit">Cadastrar</button>
                         </div>
                     </div>
                 </div>
             </div>
         </div>
-
-
-        <!-- Display de Disciplinas -->
         <div class="card">
             <div class="card-header bg-primary text-white">Disciplinas Cadastradas</div>
             <div class="card-body">
@@ -135,7 +124,7 @@
 
                 <!-- Table -->
                 <table class="table table-striped table-bordered" id="tableDisplay">
-                    <thead>
+                    <thead id="tableHead">
                     <tr>
                         <th data-column="nome" data-order="asc" class="sortable">Nome</th>
                         <th data-column="codigo" data-order="asc" class="sortable">Código</th>
